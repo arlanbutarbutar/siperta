@@ -26,14 +26,14 @@
         <span class="menu-title">Produk</span>
       </a>
     </li>
-    <?php if($_SESSION['data-user']['role']==2){?>
+    <?php }if($_SESSION['data-user']['role']==2){?>
     <li class="nav-item">
       <a class="nav-link" style="cursor: pointer;" onclick="window.location.href='penjualan'">
         <i class="mdi mdi-cart-outline menu-icon"></i>
         <span class="menu-title">Penjualan</span>
       </a>
     </li>
-    <?php }?>
+    <?php }if($_SESSION['data-user']['role']==3){?>
     <li class="nav-item">
       <a class="nav-link" style="cursor: pointer;" onclick="window.location.href='pembayaran'">
         <i class="mdi mdi-cash-multiple menu-icon"></i>

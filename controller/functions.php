@@ -137,6 +137,35 @@ if (isset($_SESSION['data-user'])) {
       move_uploaded_file($tmpName, '../assets/images/produk/' . $encrypt);
       return $encrypt;
     }
+    function imageBayar()
+    {
+      $namaFile = $_FILES["image"]["name"];
+      $ukuranFile = $_FILES["image"]["size"];
+      $error = $_FILES["image"]["error"];
+      $tmpName = $_FILES["image"]["tmp_name"];
+      if ($error === 4) {
+        $_SESSION['message-danger'] = "Pilih gambar terlebih dahulu!";
+        $_SESSION['time-message'] = time();
+        return false;
+      }
+      $ekstensiGambarValid = ['jpg', 'png', 'jpeg', 'heic'];
+      $ekstensiGambar = explode('.', $namaFile);
+      $ekstensiGambar = strtolower(end($ekstensiGambar));
+      if (!in_array($ekstensiGambar, $ekstensiGambarValid)) {
+        $_SESSION['message-danger'] = "Maaf, file kamu bukan gambar!";
+        $_SESSION['time-message'] = time();
+        return false;
+      }
+      if ($ukuranFile > 2000000) {
+        $_SESSION['message-danger'] = "Maaf, ukuran gambar terlalu besar! (2 MB)";
+        $_SESSION['time-message'] = time();
+        return false;
+      }
+      $namaFile_encrypt = crc32($namaFile);
+      $encrypt = $namaFile_encrypt . "." . $ekstensiGambar;
+      move_uploaded_file($tmpName, '../assets/images/pembayaran/' . $encrypt);
+      return $encrypt;
+    }
     function add_produk($data)
     {
       global $conn, $idUser;
@@ -186,7 +215,64 @@ if (isset($_SESSION['data-user'])) {
       mysqli_query($conn, "DELETE FROM produk WHERE id_produk='$id_produk'");
       return mysqli_affected_rows($conn);
     }
+    function confirm_pay($data)
+    {
+      global $conn;
+      $id_penjualan = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-penjualan']))));
+      $metode_bayar = "Tunai";
+      $total = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['total']))));
+      $image = imageBayar();
+      if (!$image) {
+        return false;
+      }
+      $id_produk = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-produk']))));
+      $stok = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['stok']))));
+      $jumlah_beli = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['jumlah-beli']))));
+      $stok_now = $stok - $jumlah_beli;
+      mysqli_query($conn, "UPDATE produk SET stok='$stok_now' WHERE id_produk='$id_produk'");
+      mysqli_query($conn, "INSERT INTO pembayaran(id_penjualan,metode_bayar,total,bukti_bayar) VALUES('$id_penjualan','$metode_bayar','$total','$image')");
+      return mysqli_affected_rows($conn);
+    }
   }
-  if ($_SESSION['data-user']['role'] == 3) {
+  if ($_SESSION['data-user']['role'] <= 3) {
+    function ubah_profile($data)
+    {
+      global $conn, $idUser;
+      $username = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['username']))));
+      $jenis_kelamin = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['jk']))));
+      $telpon = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['telpon']))));
+      $alamat = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['alamat']))));
+      mysqli_query($conn, "UPDATE users SET username='$username', jenis_kelamin='$jenis_kelamin', telpon='$telpon', alamat='$alamat' WHERE id_user='$idUser'");
+      return mysqli_affected_rows($conn);
+    }
+    if ($_SESSION['data-user']['role'] == 3) {
+      function buy_product($data)
+      {
+        global $conn, $idUser;
+        $id_produk = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-produk']))));
+        $takeID = mysqli_query($conn, "SELECT * FROM penjualan ORDER BY id_penjualan DESC LIMIT 1");
+        if (mysqli_num_rows($takeID) > 0) {
+          $rowID = mysqli_fetch_assoc($takeID);
+          $id_penjualan = $rowID['id_penjualan'] + 1;
+        } else {
+          $id_penjualan = 1;
+        }
+        $kode_pembelian = mt_rand(1000, 9999);
+        $ket = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['ket']))));
+        $jumlah_beli = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['jumlah-beli']))));
+        $stok = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['stok']))));
+        $satuan = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['satuan']))));
+        if ($jumlah_beli > $stok) {
+          $_SESSION['message-danger'] = "Maaf, jumlah pembelian yang anda inginkan melampaui batas persedian yaitu " . $stok . " " . $satuan . ".";
+          $_SESSION['time-message'] = time();
+          return false;
+        }
+        $harga = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['harga']))));
+        $total = $jumlah_beli * $harga;
+        mysqli_query($conn, "INSERT INTO penjualan(id_penjualan,id_pembeli,keterangan,jumlah_beli,total) VALUES('$id_penjualan','$idUser','$ket','$jumlah_beli','$total')");
+        mysqli_query($conn, "INSERT INTO penjualan_detail(id_produk,id_penjualan,kode_pembelian) VALUES('$id_produk','$id_penjualan','$kode_pembelian')");
+        return mysqli_affected_rows($conn);
+      }
+    }
   }
 }

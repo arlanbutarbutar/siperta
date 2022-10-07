@@ -74,6 +74,7 @@
             <div class="card-body">
               <h6><?= $row['nama_produk'] ?></h6>
               <h3 class="card-title">Rp. <?= number_format($row['harga']) ?></h3>
+              <p><?= $row['deskripsi'] ?></p>
               <p>Stok <?= $row['stok'] . " " . $row['satuan'] ?></p>
               <p><i class="mdi mdi-map-marker"></i> <?= $row['lokasi'] . " (" . $row['nama_distributor'] . ")" ?></p>
               <?php if ($_SESSION['data-user']['role'] == 3) { ?>
@@ -174,7 +175,14 @@
             </div>
           </div>
         </div>
-    <?php }
-    } ?>
+      <?php }
+    }
+    if ($_SESSION['data-user']['role'] >= 2) { ?>
+      <div class="col-md-12">
+        <div class="d-flex justify-content-end">
+          <a href="produk" class="m-3 text-decoration-none"><i class="mdi mdi-arrow-right-drop-circle" style="font-size: 18px;"></i> Semua Produk</a>
+        </div>
+      </div>
+    <?php } ?>
   </div>
 </div>

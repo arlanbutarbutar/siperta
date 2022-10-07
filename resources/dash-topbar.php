@@ -48,6 +48,7 @@
             <img class="img-md rounded-circle" src="../assets/images/user.png" style="width: 50px;" alt="Profile image">
             <p class="mb-1 mt-3 font-weight-semibold"><?= $_SESSION['data-user']['username'] ?></p>
           </div>
+          <a style="cursor: pointer;" onclick="window.location.href='profile'" class="dropdown-item"><i class="dropdown-item-icon mdi mdi-account-outline text-primary me-2"></i> Profile</a>
           <a style="cursor: pointer;" onclick="window.location.href='../auth/signout'" class="dropdown-item border-bottom-0"><i class="dropdown-item-icon mdi mdi-power text-primary me-2"></i>Keluar</a>
         </div>
       </li>
