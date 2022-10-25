@@ -37,7 +37,7 @@ $_SESSION['page-name'] = "Pembayaran";
       <div class="main-panel">
         <div class="content-wrapper">
           <div class="row">
-            <?php if ($_SESSION['data-user']['role'] == 2) {
+            <?php if ($_SESSION['data-user']['role'] == 3) {
               if (isset($_GET['confirm-pay'])) {
                 if (mysqli_num_rows($confirm_pay) > 0) {
                   while ($row_conpay = mysqli_fetch_assoc($confirm_pay)) { ?>
@@ -176,7 +176,7 @@ $_SESSION['page-name'] = "Pembayaran";
                                         Lihat Status
                                       </button>
                                       <div class="modal fade" id="status-bayar<?= $row['id_detail'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
+                                        <div class="modal-dialog modal-xl">
                                           <div class="modal-content">
                                             <div class="modal-header border-bottom-0">
                                               <h5 class="modal-title" id="exampleModalLabel">#<?= $row['kode_pembelian'] ?> Status Bayar</h5>
@@ -186,7 +186,47 @@ $_SESSION['page-name'] = "Pembayaran";
                                               <?php $id_penjualan = $row['id_penjualan'];
                                               $status_pembayaran = mysqli_query($conn, "SELECT * FROM pembayaran WHERE id_penjualan='$id_penjualan'");
                                               if (mysqli_num_rows($status_pembayaran) == 0) { ?>
-                                                <p>Status Pembayaran anda masih diproses oleh penjual.</p>
+                                                <div class="row">
+                                                  <div class="col-lg-4 text-dark text-left">
+                                                    <h6 class="mt-3">Pembeli</h5>
+                                                      <p><?= $row_inv['username'] ?></p>
+                                                      <p><?= $row_inv['alamat'] ?></p>
+                                                      <p><?= $row_inv['telpon'] ?></p>
+                                                      <h6 class="mt-3">Tgl Pembelian</h6>
+                                                      <p><?php $dateCreate = date_create($row['created_at']);
+                                                          echo date_format($dateCreate, "d M Y h:i a"); ?></p>
+                                                      <h6 class="mt-3">Penjual</h6>
+                                                      <p><?= $row['username'] ?></p>
+                                                      <p><?= $row['alamat'] ?></p>
+                                                      <p><?= $row['telpon'] ?></p>
+                                                      <h6 class="mt-3">Metode Pembayaran</h6>
+                                                      <p><?= $row['bank'] . ' - ' . $row['norek'] ?></p>
+                                                      <a href="pembayaran?confirm-pay=<?= $row['kode_pembelian'] ?>" class="btn btn-link text-decoration-none">Konfirmasi Bayar</a>
+                                                  </div>
+                                                  <div class="col-lg-8">
+                                                    <div class="card mt-3">
+                                                      <div class="card-header">
+                                                        Data Pembelian
+                                                      </div>
+                                                      <div class="card-body">
+                                                        <table class="table table-sm">
+                                                          <thead>
+                                                            <tr>
+                                                              <th scope="col">Deskripsi</th>
+                                                              <th scope="col">Jumlah</th>
+                                                            </tr>
+                                                          </thead>
+                                                          <tbody>
+                                                            <tr>
+                                                              <th scope="row"><?= $row['nama_produk'] . ' - ' . $row['jumlah_beli'] . " " . $row['satuan'] ?></th>
+                                                              <td>Rp. <?= number_format($row['total']) ?></td>
+                                                            </tr>
+                                                          </tbody>
+                                                        </table>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
                                                 <?php } else if (mysqli_num_rows($status_pembayaran) > 0) {
                                                 while ($row_status = mysqli_fetch_assoc($status_pembayaran)) { ?>
                                                   <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">

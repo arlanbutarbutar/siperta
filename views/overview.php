@@ -79,9 +79,9 @@
               <p><i class="mdi mdi-map-marker"></i> <?= $row['lokasi'] . " (" . $row['nama_distributor'] . ")" ?></p>
               <?php if ($_SESSION['data-user']['role'] == 3) { ?>
                 <div class="d-flex">
-                  <a href="pembayaran?id-buy=<?= $row['kode_produk'] ?>" class="btn btn-primary">Beli</a>
+                  <a href="pembayaran?id-buy=<?= $row['kode_produk'] ?>" class="btn btn-primary text-white">Beli</a>
                 </div>
-              <?php } else if ($_SESSION['data-user']['role'] == 2) { ?>
+              <?php } else if ($_SESSION['data-user']['role'] <= 2) { ?>
                 <div class="d-flex mt-3">
                   <a href="#" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#ubah<?= $row['id_produk'] ?>">Ubah</a>
                   <div class="modal fade" id="ubah<?= $row['id_produk'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -175,14 +175,12 @@
             </div>
           </div>
         </div>
-      <?php }
-    }
-    if ($_SESSION['data-user']['role'] >= 2) { ?>
-      <div class="col-md-12">
-        <div class="d-flex justify-content-end">
-          <a href="produk" class="m-3 text-decoration-none"><i class="mdi mdi-arrow-right-drop-circle" style="font-size: 18px;"></i> Semua Produk</a>
-        </div>
+    <?php }
+    } ?>
+    <div class="col-md-12">
+      <div class="d-flex justify-content-end">
+        <a href="produk" class="m-3 text-decoration-none"><i class="mdi mdi-arrow-right-drop-circle" style="font-size: 18px;"></i> Semua Produk</a>
       </div>
-    <?php } ?>
+    </div>
   </div>
 </div>

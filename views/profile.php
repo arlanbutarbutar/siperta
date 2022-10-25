@@ -65,6 +65,20 @@ $_SESSION['page-url'] = "profile";
                           <label for="alamat" class="form-label">Alamat</label>
                           <input type="text" name="alamat" value="<?= $row['alamat'] ?>" class="form-control" id="alamat" placeholder="Alamat" required>
                         </div>
+                        <div class="mb-3">
+                          <label for="bank" class="form-label">Bank</label>
+                          <select name="bank" id="bank" class="form-select" aria-label="Default select example" required>
+                            <option selected value="">Pilih Bank</option>
+                            <option value="BRI">BRI</option>
+                            <option value="BCA">BCA</option>
+                            <option value="BNI">BNI</option>
+                            <option value="MANDIRI">MANDIRI</option>
+                          </select>
+                        </div>
+                        <div class="mb-3">
+                          <label for="norek" class="form-label">Nomor Rekening</label>
+                          <input type="text" name="norek" value="<?= $row['norek'] ?>" class="form-control" id="norek" placeholder="Nomor Rekening" required>
+                        </div>
                         <button type="submit" name="ubah-profile" class="btn btn-primary">Simpan</button>
                       </form>
                     </div>
@@ -101,6 +115,10 @@ $_SESSION['page-url'] = "profile";
                               <th scope="row">Alamat</th>
                               <td>:</td>
                               <td class="w-75"><?= $row['alamat'] ?></td>
+                            </tr>
+                            <th scope="row">Bank</th>
+                            <td>:</td>
+                            <td class="w-75"><?= $row['bank'] . ' - ' . $row['norek'] ?></td>
                             </tr>
                           </tbody>
                         </table>

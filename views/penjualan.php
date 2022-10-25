@@ -1,11 +1,12 @@
 <?php require_once("../controller/script.php");
 require_once("redirect.php");
-if ($_SESSION['data-user']['role'] == 1) {
-  header("Location: ./");
+if ($_SESSION['data-user']['role'] == 3) {
+  header("Location: " . $_SESSION['page-url']);
   exit();
+} else {
+  $_SESSION['page-name'] = "Penjualan";
+  $_SESSION['page-url'] = "penjualan";
 }
-$_SESSION['page-name'] = "Penjualan";
-$_SESSION['page-url'] = "penjualan";
 ?>
 
 <!DOCTYPE html>
@@ -79,7 +80,7 @@ $_SESSION['page-url'] = "penjualan";
                                   <?php $id_penjualan = $row['id_penjualan'];
                                   $pay = mysqli_query($conn, "SELECT * FROM pembayaran WHERE id_penjualan='$id_penjualan'");
                                   if (mysqli_num_rows($pay) == 0) { ?>
-                                    <a href="pembayaran?confirm-pay=<?= $row['kode_pembelian'] ?>" class="btn btn-link text-decoration-none">Konfirmasi Bayar</a>
+                                    <a href="#" class="btn btn-link text-decoration-none">Konfirmasi Bayar</a>
                                   <?php } else { ?>
                                     <a href="#" class="btn btn-link text-decoration-none" data-bs-toggle="modal" data-bs-target="#status-bayar<?= $row['id_detail'] ?>"><i class="mdi mdi-check-circle text-success"></i> Pembayaran Berhasil</a>
                                     <div class="modal fade" id="status-bayar<?= $row['id_detail'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

@@ -62,8 +62,6 @@ $_SESSION['page-url'] = "distributor";
                           <tr>
                             <th>Nama</th>
                             <th>Lokasi</th>
-                            <th>Tgl Dibuat</th>
-                            <th>Tgl Diubah</th>
                             <th colspan="2">Aksi</th>
                           </tr>
                         </thead>
@@ -77,18 +75,6 @@ $_SESSION['page-url'] = "distributor";
                               <tr>
                                 <td><?= $row['nama_distributor'] ?></td>
                                 <td><?= $row['lokasi'] ?></td>
-                                <td>
-                                  <div class="badge badge-opacity-success">
-                                    <?php $dateCreate = date_create($row['created_at']);
-                                    echo date_format($dateCreate, "l, d M Y h:i a"); ?>
-                                  </div>
-                                </td>
-                                <td>
-                                  <div class="badge badge-opacity-warning">
-                                    <?php $dateUpdate = date_create($row['updated_at']);
-                                    echo date_format($dateUpdate, "l, d M Y h:i a"); ?>
-                                  </div>
-                                </td>
                                 <td>
                                   <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#ubah<?= $row['id_distributor'] ?>">
                                     <i class="mdi mdi-table-edit"></i>
