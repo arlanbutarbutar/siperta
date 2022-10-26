@@ -43,7 +43,7 @@ if (isset($_POST['masuk'])) {
 }
 
 $card_produk = mysqli_query($conn, "SELECT * FROM produk JOIN distributor ON produk.id_distributor=distributor.id_distributor JOIN satuan ON produk.id_satuan=satuan.id_satuan");
-if (isset($_POST['buy-product'])) {
+if (isset($_POST['buy-product-visitor'])) {
   $_SESSION['id-buy'] = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $_POST['id-buy']))));
   header("Location: auth/");
   exit();

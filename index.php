@@ -163,7 +163,7 @@ $_SESSION['actual-link'] = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
                 <div class="product-action">
                   <form action="" method="post">
                     <input type="hidden" name="id-buy" value="<?= $row['kode_produk']?>">
-                    <button type="submit" name="buy-product" class="btn btn-outline-dark btn-square"><i class="fa fa-shopping-cart"></i></button>
+                    <button type="submit" name="buy-product-visitor" class="btn btn-outline-dark btn-square"><i class="fa fa-shopping-cart"></i></button>
                   </form>
                 </div>
               </div>
