@@ -38,7 +38,7 @@ $_SESSION['page-url'] = "profile";
                       <form action="" method="POST">
                         <div class="mb-3">
                           <label for="username" class="form-label">Nama</label>
-                          <input type="text" name="username" value="<?= $row['username'] ?>" class="form-control" id="username" placeholder="Nama" required>
+                          <input type="text" name="username" value="<?= $row['username'] ?>" class="form-control" id="username" placeholder="Nama" pattern="^[a-zA-Z\s'-]{1,100}$" oninvalid="this.setCustomValidity('Nama tidak boleh ada karakter selain huruf!')" required>
                         </div>
                         <div class="mb-3">
                           <label for="jenis-kelamin" class="form-label">Jenis Kelamin</label>
@@ -131,6 +131,21 @@ $_SESSION['page-url'] = "profile";
           } ?>
         </div>
         <?php require_once("../resources/dash-footer.php") ?>
+        <script>
+          function validation() {
+            var validasiAngka = /^[0-9 ]+$/;
+            var nama = document.getElementById("username");
+            if (nama.value.match(validasiAngka)) {
+              Swal.fire({
+                icon: 'error',
+                title: 'Kesalahan',
+                text: "Masukkan nama Anda!\nFormat hanya diperbolehkan huruf!",
+              })
+              nama.focus();
+              return false;
+            }
+          }
+        </script>
 </body>
 
 </html>

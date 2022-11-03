@@ -212,15 +212,6 @@ if (isset($_SESSION['data-user'])) {
   }
 
   if ($_SESSION['data-user']['role'] <= 3) {
-    $profile = mysqli_query($conn, "SELECT * FROM users WHERE id_user='$idUser'");
-    if (isset($_POST['ubah-profile'])) {
-      if (ubah_profile($_POST) > 0) {
-        $_SESSION['message-success'] = "Profil akun anda berhasil di ubah.";
-        $_SESSION['time-message'] = time();
-        header("Location: " . $_SESSION['page-url']);
-        exit();
-      }
-    }
 
     if (isset($_GET['confirm-pay'])) {
       $id_pembelian = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $_GET['confirm-pay']))));
@@ -291,6 +282,16 @@ if (isset($_SESSION['data-user'])) {
   }
 
   if ($_SESSION['data-user']['role'] <= 4) {
+    $profile = mysqli_query($conn, "SELECT * FROM users WHERE id_user='$idUser'");
+    if (isset($_POST['ubah-profile'])) {
+      if (ubah_profile($_POST) > 0) {
+        $_SESSION['message-success'] = "Profil akun anda berhasil di ubah.";
+        $_SESSION['time-message'] = time();
+        header("Location: " . $_SESSION['page-url']);
+        exit();
+      }
+    }
+    
     $produkOverview = mysqli_query($conn, "SELECT * FROM produk JOIN distributor ON produk.id_distributor=distributor.id_distributor JOIN satuan ON produk.id_satuan=satuan.id_satuan ORDER BY produk.id_produk DESC LIMIT 15");
 
     if ($_SESSION['data-user']['role'] == 4) {
