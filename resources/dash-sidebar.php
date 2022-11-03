@@ -26,7 +26,7 @@
         <span class="menu-title text-white">Produk</span>
       </a>
     </li>
-    <?php if($_SESSION['data-user']['role']<=2){?>
+    <?php if($_SESSION['data-user']['role']<=2 || $_SESSION['data-user']['role'] == 4){?>
     <li class="nav-item">
       <a class="nav-link" style="cursor: pointer;" onclick="window.location.href='penjualan'">
         <i class="mdi mdi-cart-outline menu-icon text-white"></i>

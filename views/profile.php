@@ -77,7 +77,7 @@ $_SESSION['page-url'] = "profile";
                         </div>
                         <div class="mb-3">
                           <label for="norek" class="form-label">Nomor Rekening</label>
-                          <input type="text" name="norek" value="<?= $row['norek'] ?>" class="form-control" id="norek" placeholder="Nomor Rekening" required>
+                          <input type="number" name="norek" value="<?= $row['norek'] ?>" class="form-control" id="norek" placeholder="Nomor Rekening" required>
                         </div>
                         <button type="submit" name="ubah-profile" class="btn btn-primary">Simpan</button>
                       </form>

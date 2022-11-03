@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 25 Okt 2022 pada 12.27
+-- Waktu pembuatan: 03 Nov 2022 pada 09.42
 -- Versi server: 10.4.22-MariaDB
 -- Versi PHP: 7.4.27
 
@@ -29,6 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `distributor` (
   `id_distributor` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
   `nama_distributor` varchar(100) NOT NULL,
   `lokasi` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -147,7 +148,8 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id_user`, `id_role`, `username`, `email`, `password`, `jenis_kelamin`, `telpon`, `alamat`, `norek`, `bank`, `created_at`, `updated_at`) VALUES
 (1, 1, 'admin', 'admin@gmail.com', '$2y$10$//KMATh3ibPoI3nHFp7x/u7vnAbo2WyUgmI4x0CVVrH8ajFhMvbjG', 'Pria', '08113827421', 'Jalan W.J. Lalamentik No.95', 0, '', '2022-09-26 06:32:37', '2022-09-26 06:32:37'),
 (18, 2, 'penjual', 'penjual@gmail.com', '$2y$10$KYxoi15JRXGOKWh63P/ikejfR0utUQcXXelztPWeYreW1M4q4NAOO', 'Pria', '08113827421', 'Jalan W.J. Lalamentik No.95', 2147483647, 'BCA', '2022-10-04 06:26:35', '2022-10-04 06:26:35'),
-(21, 3, 'pembeli', 'pembeli@gmail.com', '$2y$10$xs4GgrB1V2EpJXZcmgIw6ufwhZlT60UrKy9d96H.9a6P0A/FbBVs.', 'Pria', '08113827421', 'Jalan W.J. Lalamentik No.95', 0, '', '2022-10-05 08:42:49', '2022-10-05 08:42:49');
+(21, 3, 'pembeli', 'pembeli@gmail.com', '$2y$10$xs4GgrB1V2EpJXZcmgIw6ufwhZlT60UrKy9d96H.9a6P0A/FbBVs.', 'Pria', '08113827421', 'Jalan W.J. Lalamentik No.95', 0, '', '2022-10-05 08:42:49', '2022-10-05 08:42:49'),
+(22, 4, 'distributor', 'distributor@gmail.com', '$2y$10$g2iv1fuP0WQM/vaUFgwAKe/tVfT15aIaP9kdIvi88MBdXkkRVz/dW', 'Pria', '08232525252', 'Jalan W.J. Lalamentik No.95', 0, '', '2022-11-03 08:50:03', '2022-11-03 08:50:46');
 
 -- --------------------------------------------------------
 
@@ -167,7 +169,8 @@ CREATE TABLE `users_role` (
 INSERT INTO `users_role` (`id_role`, `roles`) VALUES
 (1, 'Administrator'),
 (2, 'Penjual'),
-(3, 'Pembeli');
+(3, 'Pembeli'),
+(4, 'Distributor');
 
 --
 -- Indexes for dumped tables
@@ -177,7 +180,8 @@ INSERT INTO `users_role` (`id_role`, `roles`) VALUES
 -- Indeks untuk tabel `distributor`
 --
 ALTER TABLE `distributor`
-  ADD PRIMARY KEY (`id_distributor`);
+  ADD PRIMARY KEY (`id_distributor`),
+  ADD KEY `id_user` (`id_user`);
 
 --
 -- Indeks untuk tabel `pembayaran`
@@ -237,13 +241,13 @@ ALTER TABLE `users_role`
 -- AUTO_INCREMENT untuk tabel `distributor`
 --
 ALTER TABLE `distributor`
-  MODIFY `id_distributor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_distributor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT untuk tabel `pembayaran`
 --
 ALTER TABLE `pembayaran`
-  MODIFY `id_bayar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_bayar` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT untuk tabel `penjualan`
@@ -255,13 +259,13 @@ ALTER TABLE `penjualan`
 -- AUTO_INCREMENT untuk tabel `penjualan_detail`
 --
 ALTER TABLE `penjualan_detail`
-  MODIFY `id_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT untuk tabel `produk`
 --
 ALTER TABLE `produk`
-  MODIFY `id_produk` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_produk` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT untuk tabel `satuan`
@@ -273,17 +277,23 @@ ALTER TABLE `satuan`
 -- AUTO_INCREMENT untuk tabel `users`
 --
 ALTER TABLE `users`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT untuk tabel `users_role`
 --
 ALTER TABLE `users_role`
-  MODIFY `id_role` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_role` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
 --
+
+--
+-- Ketidakleluasaan untuk tabel `distributor`
+--
+ALTER TABLE `distributor`
+  ADD CONSTRAINT `distributor_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Ketidakleluasaan untuk tabel `pembayaran`

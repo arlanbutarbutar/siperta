@@ -85,17 +85,10 @@ if (isset($_SESSION['data-user'])) {
     $page_role2 = isset($_GET["page"]) ? (int)$_GET["page"] : 1;
     $awal_data_role2 = ($page_role2 > 1) ? ($page_role2 * $data_role2) - $data_role2 : 0;
     $distributor = mysqli_query($conn, "SELECT * FROM distributor ORDER BY id_distributor DESC LIMIT $awal_data_role2, $data_role2");
+    $select_distributor = mysqli_query($conn, "SELECT * FROM users WHERE id_role='4'");
     if (isset($_POST['add-distributor'])) {
       if (add_distributor($_POST) > 0) {
         $_SESSION['message-success'] = "Distributor " . $_POST['nama'] . " berhasil di tambahkan.";
-        $_SESSION['time-message'] = time();
-        header("Location: " . $_SESSION['page-url']);
-        exit();
-      }
-    }
-    if (isset($_POST['edit-distributor'])) {
-      if (edit_distributor($_POST) > 0) {
-        $_SESSION['message-success'] = "Distributor " . $_POST['nama'] . " berhasil di ubah.";
         $_SESSION['time-message'] = time();
         header("Location: " . $_SESSION['page-url']);
         exit();
@@ -229,8 +222,6 @@ if (isset($_SESSION['data-user'])) {
       }
     }
 
-    $produkOverview = mysqli_query($conn, "SELECT * FROM produk JOIN distributor ON produk.id_distributor=distributor.id_distributor JOIN satuan ON produk.id_satuan=satuan.id_satuan ORDER BY produk.id_produk DESC LIMIT 15");
-
     if (isset($_GET['confirm-pay'])) {
       $id_pembelian = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $_GET['confirm-pay']))));
       $confirm_pay = mysqli_query($conn, "SELECT * FROM penjualan_detail 
@@ -296,6 +287,54 @@ if (isset($_SESSION['data-user'])) {
 
       $my_inv = mysqli_query($conn, "SELECT * FROM users WHERE id_user='$idUser'");
       $row_inv = mysqli_fetch_assoc($my_inv);
+    }
+  }
+
+  if ($_SESSION['data-user']['role'] <= 4) {
+    $produkOverview = mysqli_query($conn, "SELECT * FROM produk JOIN distributor ON produk.id_distributor=distributor.id_distributor JOIN satuan ON produk.id_satuan=satuan.id_satuan ORDER BY produk.id_produk DESC LIMIT 15");
+
+    if ($_SESSION['data-user']['role'] == 4) {
+      $data_role3 = 25;
+      $result_role3 = mysqli_query($conn, "SELECT * FROM produk");
+      $total_role3 = mysqli_num_rows($result_role3);
+      $total_page_role3 = ceil($total_role3 / $data_role3);
+      $page_role3 = isset($_GET["page"]) ? (int)$_GET["page"] : 1;
+      $awal_data_role3 = ($page_role3 > 1) ? ($page_role3 * $data_role3) - $data_role3 : 0;
+      $produk = mysqli_query($conn, "SELECT * FROM produk 
+        JOIN distributor ON produk.id_distributor=distributor.id_distributor 
+        JOIN satuan ON produk.id_satuan=satuan.id_satuan 
+        WHERE distributor.id_user='$idUser' 
+        ORDER BY produk.id_produk 
+        DESC LIMIT $awal_data_role3, $data_role3
+      ");
+
+      $data_role4 = 25;
+      $result_role4 = mysqli_query($conn, "SELECT * FROM penjualan_detail");
+      $total_role4 = mysqli_num_rows($result_role4);
+      $total_page_role4 = ceil($total_role4 / $data_role4);
+      $page_role4 = isset($_GET["page"]) ? (int)$_GET["page"] : 1;
+      $awal_data_role4 = ($page_role4 > 1) ? ($page_role4 * $data_role4) - $data_role4 : 0;
+      $penjualan = mysqli_query($conn, "SELECT * FROM penjualan_detail 
+        JOIN penjualan ON penjualan_detail.id_penjualan=penjualan.id_penjualan
+        JOIN produk ON penjualan_detail.id_produk=produk.id_produk
+        JOIN distributor ON produk.id_distributor=distributor.id_distributor 
+        JOIN satuan ON produk.id_satuan=satuan.id_satuan
+        JOIN users ON penjualan.id_pembeli=users.id_user
+        WHERE distributor.id_user='$idUser' 
+        ORDER BY penjualan_detail.id_detail 
+        DESC LIMIT $awal_data_role4, $data_role4
+      ");
+
+      $laporan_penjualan = mysqli_query($conn, "SELECT * FROM penjualan_detail 
+        JOIN penjualan ON penjualan_detail.id_penjualan=penjualan.id_penjualan
+        JOIN pembayaran ON penjualan.id_penjualan=pembayaran.id_penjualan
+        JOIN produk ON penjualan_detail.id_produk=produk.id_produk
+        JOIN distributor ON produk.id_distributor=distributor.id_distributor 
+        JOIN satuan ON produk.id_satuan=satuan.id_satuan
+        JOIN users ON penjualan.id_pembeli=users.id_user
+        WHERE distributor.id_user='$idUser' 
+        ORDER BY penjualan_detail.id_detail DESC
+      ");
     }
   }
 }

@@ -41,11 +41,12 @@ $_SESSION['page-url'] = "distributor";
                   <form action="" method="post">
                     <div class="mb-3">
                       <label for="nama" class="form-label">Nama</label>
-                      <input type="text" name="nama" class="form-control" id="nama" placeholder="Nama" required>
-                    </div>
-                    <div class="mb-3">
-                      <label for="lokasi" class="form-label">Lokasi</label>
-                      <input type="text" name="lokasi" class="form-control" id="lokasi" placeholder="Lokasi" required>
+                      <select class="form-select" name="id-user" id="nama" aria-label="Default select example" required>
+                        <option selected value="">Pilih Distributor</option>
+                        <?php foreach ($select_distributor as $row_dis) : ?>
+                          <option value="<?= $row_dis['id_user'] ?>"><?= $row_dis['username'] ?></option>
+                        <?php endforeach; ?>
+                      </select>
                     </div>
                     <button type="submit" name="add-distributor" class="btn btn-primary mt-3">Tambah</button>
                   </form>
@@ -62,52 +63,19 @@ $_SESSION['page-url'] = "distributor";
                           <tr>
                             <th>Nama</th>
                             <th>Lokasi</th>
-                            <th colspan="2">Aksi</th>
+                            <th colspan="1">Aksi</th>
                           </tr>
                         </thead>
                         <tbody id="search-page">
                           <?php if (mysqli_num_rows($distributor) == 0) { ?>
                             <tr>
-                              <td colspan="6">Belum ada data distributor</td>
+                              <td colspan="5">Belum ada data distributor</td>
                             </tr>
                             <?php } else if (mysqli_num_rows($distributor) > 0) {
                             while ($row = mysqli_fetch_assoc($distributor)) { ?>
                               <tr>
                                 <td><?= $row['nama_distributor'] ?></td>
                                 <td><?= $row['lokasi'] ?></td>
-                                <td>
-                                  <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#ubah<?= $row['id_distributor'] ?>">
-                                    <i class="mdi mdi-table-edit"></i>
-                                  </button>
-                                  <div class="modal fade" id="ubah<?= $row['id_distributor'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                      <div class="modal-content">
-                                        <div class="modal-header border-bottom-0">
-                                          <h5 class="modal-title" id="exampleModalLabel">Ubah <?= $row['nama_distributor'] ?></h5>
-                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <form action="" method="POST">
-                                          <div class="modal-body">
-                                            <div class="mb-3">
-                                              <label for="nama" class="form-label">Nama</label>
-                                              <input type="text" name="nama" class="form-control" id="nama" placeholder="Nama" value="<?= $row['nama_distributor']?>" required>
-                                            </div>
-                                            <div class="mb-3">
-                                              <label for="lokasi" class="form-label">Lokasi</label>
-                                              <input type="text" name="lokasi" class="form-control" id="lokasi" placeholder="Lokasi" value="<?= $row['lokasi']?>" required>
-                                            </div>
-                                          </div>
-                                          <div class="modal-footer justify-content-center border-top-0">
-                                            <input type="hidden" name="id-distributor" value="<?= $row['id_distributor'] ?>">
-                                            <input type="hidden" name="namaOld" value="<?= $row['nama_distributor'] ?>">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                            <button type="submit" name="edit-distributor" class="btn btn-warning">Ubah</button>
-                                          </div>
-                                        </form>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </td>
                                 <td>
                                   <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#hapus<?= $row['id_distributor'] ?>">
                                     <i class="mdi mdi-delete"></i>
@@ -165,16 +133,16 @@ $_SESSION['page-url'] = "distributor";
                                   if ($total_page_role2 >= 4) : ?>
                                     <li class="page-item">
                                       <a href="<?= $_SESSION['page-url'] ?>?page=<?php if ($page_role2 > 4) {
-                                                                                  echo $page_role2;
-                                                                                } else if ($page_role2 <= 4) {
-                                                                                  echo '5';
-                                                                                } ?>/" class="btn btn-<?php if ($page_role2 <= 4) {
-                                                                                                                                                                                  echo 'outline-';
-                                                                                                                                                                                } ?>primary btn-sm rounded-0"><?php if ($page_role2 > 4) {
-                                                                                                                                                                                                                                              echo $page_role2;
-                                                                                                                                                                                                                                            } else if ($page_role2 <= 4) {
-                                                                                                                                                                                                                                              echo '5';
-                                                                                                                                                                                                                                            } ?></a>
+                                                                                    echo $page_role2;
+                                                                                  } else if ($page_role2 <= 4) {
+                                                                                    echo '5';
+                                                                                  } ?>/" class="btn btn-<?php if ($page_role2 <= 4) {
+                                                                                                          echo 'outline-';
+                                                                                                        } ?>primary btn-sm rounded-0"><?php if ($page_role2 > 4) {
+                                                                                                                                      echo $page_role2;
+                                                                                                                                    } else if ($page_role2 <= 4) {
+                                                                                                                                      echo '5';
+                                                                                                                                    } ?></a>
                                     </li>
                                   <?php endif;
                                   if ($page_role2 < $total_page_role2 && $total_page_role2 >= 4) : ?>

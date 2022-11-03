@@ -24,6 +24,18 @@ if ($_SESSION['data-user']['role'] == 2) {
     ORDER BY penjualan_detail.id_detail DESC
   ");
 }
+if ($_SESSION['data-user']['role'] == 4) {
+  $penjualan = mysqli_query($conn, "SELECT * FROM penjualan_detail 
+    JOIN penjualan ON penjualan_detail.id_penjualan=penjualan.id_penjualan
+    JOIN pembayaran ON penjualan.id_penjualan=pembayaran.id_penjualan
+    JOIN produk ON penjualan_detail.id_produk=produk.id_produk
+    JOIN distributor ON produk.id_distributor=distributor.id_distributor 
+    JOIN satuan ON produk.id_satuan=satuan.id_satuan
+    JOIN users ON penjualan.id_pembeli=users.id_user
+    WHERE distributor.id_user='$idUser' 
+    ORDER BY penjualan_detail.id_detail DESC
+  ");
+}
 
 header("Content-type: application/vnd-ms-excel");
 header("Content-Disposition: attachment; filename=Data Penjualan SIPERTA.xls");

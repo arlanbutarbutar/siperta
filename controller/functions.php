@@ -81,33 +81,19 @@ if (isset($_SESSION['data-user'])) {
     function add_distributor($data)
     {
       global $conn;
-      $nama = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['nama']))));
-      $checkNama = mysqli_query($conn, "SELECT * FROM distributor WHERE nama_distributor='$nama'");
+      $id_user = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-user']))));
+      $checkNama = mysqli_query($conn, "SELECT * FROM distributor WHERE id_user='$id_user'");
       if (mysqli_num_rows($checkNama) > 0) {
         $_SESSION['message-danger'] = "Maaf, nama distributor yang anda masukan sudah ada.";
         $_SESSION['time-message'] = time();
         return false;
+      }else{
+        $takeUser=mysqli_query($conn, "SELECT * FROM users WHERE id_user='$id_user'");
+        $row=mysqli_fetch_assoc($takeUser);
+        $nama=$row['username'];
+        $lokasi=$row['alamat'];
+        mysqli_query($conn, "INSERT INTO distributor(id_user,nama_distributor,lokasi) VALUES('$id_user','$nama','$lokasi')");
       }
-      $lokasi = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['lokasi']))));
-      mysqli_query($conn, "INSERT INTO distributor(nama_distributor,lokasi) VALUES('$nama','$lokasi')");
-      return mysqli_affected_rows($conn);
-    }
-    function edit_distributor($data)
-    {
-      global $conn, $time;
-      $id_distributor = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-distributor']))));
-      $nama = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['nama']))));
-      $namaOld = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['namaOld']))));
-      if ($nama != $namaOld) {
-        $checkNama = mysqli_query($conn, "SELECT * FROM distributor WHERE nama_distributor='$nama'");
-        if (mysqli_num_rows($checkNama) > 0) {
-          $_SESSION['message-danger'] = "Maaf, nama distributor yang anda masukan sudah ada.";
-          $_SESSION['time-message'] = time();
-          return false;
-        }
-      }
-      $lokasi = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['lokasi']))));
-      mysqli_query($conn, "UPDATE distributor SET nama_distributor='$nama', lokasi='$lokasi' WHERE id_distributor='$id_distributor'");
       return mysqli_affected_rows($conn);
     }
     function delete_distributor($data)
