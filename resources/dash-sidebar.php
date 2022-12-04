@@ -16,7 +16,7 @@
       <li class="nav-item">
         <a class="nav-link" style="cursor: pointer;" onclick="window.location.href='distributor'">
           <i class="mdi mdi-account-multiple-outline menu-icon text-white"></i>
-          <span class="menu-title text-white">Distributor</span>
+          <span class="menu-title text-white">Petani</span>
         </a>
       </li>
     <?php } ?>

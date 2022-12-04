@@ -63,9 +63,9 @@ $_SESSION['page-url'] = "produk";
                           </select>
                         </div>
                         <div class="mb-3">
-                          <label for="distributor" class="form-label">Distributor</label>
+                          <label for="distributor" class="form-label">Petani</label>
                           <select name="id-distributor" id="distributor" class="form-select" aria-label="Default select example" required>
-                            <option selected value="">Pilih Distributor</option>
+                            <option selected value="">Pilih Petani</option>
                             <?php foreach ($distributor as $row_distributor) : ?>
                               <option value="<?= $row_distributor['id_distributor'] ?>"><?= $row_distributor['nama_distributor'] . ' (Lokasi: ' . $row_distributor['lokasi'] . ')' ?></option>
                             <?php endforeach; ?>
@@ -91,7 +91,7 @@ $_SESSION['page-url'] = "produk";
                                 <th>Nama Produk</th>
                                 <th>Harga</th>
                                 <th>Stok</th>
-                                <th>Distributor</th>
+                                <th>Petani</th>
                                 <th>Tgl Dibuat</th>
                                 <th>Tgl Diubah</th>
                                 <?php if ($_SESSION['data-user']['role'] <= 2) { ?>
@@ -175,7 +175,7 @@ $_SESSION['page-url'] = "produk";
                                                     </select>
                                                   </div>
                                                   <div class="mb-3">
-                                                    <label for="distributor" class="form-label">Distributor</label>
+                                                    <label for="distributor" class="form-label">Petani</label>
                                                     <select name="id-distributor" id="distributor" class="form-select" aria-label="Default select example" required>
                                                       <option selected value="<?= $row['id_distributor'] ?>"><?= $row['nama_distributor'] ?></option>
                                                       <?php $id_distributor = $row['id_distributor'];

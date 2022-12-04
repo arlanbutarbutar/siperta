@@ -127,7 +127,7 @@ if ($_SESSION['page-url'] == "distributor") {
   }
   if (mysqli_num_rows($distributor) == 0) { ?>
     <tr>
-      <td colspan="5">Belum ada data distributor</td>
+      <td colspan="5">Belum ada data petani</td>
     </tr>
     <?php } else if (mysqli_num_rows($distributor) > 0) {
     while ($row = mysqli_fetch_assoc($distributor)) { ?>
@@ -314,7 +314,7 @@ if ($_SESSION['page-url'] == "produk") {
                           </select>
                         </div>
                         <div class="mb-3">
-                          <label for="distributor" class="form-label">Distributor</label>
+                          <label for="distributor" class="form-label">Petani</label>
                           <select name="id-distributor" id="distributor" class="form-select" aria-label="Default select example" required>
                             <option selected value="<?= $row['id_distributor'] ?>"><?= $row['nama_distributor'] ?></option>
                             <?php $id_distributor = $row['id_distributor'];

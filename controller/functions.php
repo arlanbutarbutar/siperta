@@ -186,7 +186,7 @@ if (isset($_SESSION['data-user'])) {
       }
     }
   }
-  if ($_SESSION['data-user']['role'] <= 3) {
+  if ($_SESSION['data-user']['role'] <= 4) {
     function ubah_profile($data)
     {
       global $conn, $idUser;

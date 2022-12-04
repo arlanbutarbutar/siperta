@@ -4,7 +4,7 @@ if ($_SESSION['data-user']['role'] != 1) {
   header("Location: ./");
   exit();
 }
-$_SESSION['page-name'] = "Kelola Distributor";
+$_SESSION['page-name'] = "Kelola Petani";
 $_SESSION['page-url'] = "distributor";
 ?>
 
@@ -37,12 +37,12 @@ $_SESSION['page-url'] = "distributor";
               <div class="card card-rounded mt-3">
                 <img src="../assets/images/distributor.png" class="card-img-top" alt="">
                 <div class="card-body text-center">
-                  <h5 class="card-title">Tambah Distributor</h5>
+                  <h5 class="card-title">Tambah Petani</h5>
                   <form action="" method="post">
                     <div class="mb-3">
                       <label for="nama" class="form-label">Nama</label>
                       <select class="form-select" name="id-user" id="nama" aria-label="Default select example" required>
-                        <option selected value="">Pilih Distributor</option>
+                        <option selected value="">Pilih Petani</option>
                         <?php foreach ($select_distributor as $row_dis) : ?>
                           <option value="<?= $row_dis['id_user'] ?>"><?= $row_dis['username'] ?></option>
                         <?php endforeach; ?>
@@ -69,7 +69,7 @@ $_SESSION['page-url'] = "distributor";
                         <tbody id="search-page">
                           <?php if (mysqli_num_rows($distributor) == 0) { ?>
                             <tr>
-                              <td colspan="5">Belum ada data distributor</td>
+                              <td colspan="5">Belum ada data petani</td>
                             </tr>
                             <?php } else if (mysqli_num_rows($distributor) > 0) {
                             while ($row = mysqli_fetch_assoc($distributor)) { ?>
