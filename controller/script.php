@@ -42,7 +42,7 @@ if (isset($_POST['masuk'])) {
   }
 }
 
-$card_produk = mysqli_query($conn, "SELECT * FROM produk JOIN distributor ON produk.id_distributor=distributor.id_distributor JOIN satuan ON produk.id_satuan=satuan.id_satuan");
+$card_produk = mysqli_query($conn, "SELECT * FROM produk JOIN petani ON produk.id_petani=petani.id_petani JOIN satuan ON produk.id_satuan=satuan.id_satuan");
 if (isset($_POST['buy-product-visitor'])) {
   $_SESSION['id-buy'] = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $_POST['id-buy']))));
   header("Location: auth/");
@@ -79,24 +79,24 @@ if (isset($_SESSION['data-user'])) {
     }
 
     $data_role2 = 25;
-    $result_role2 = mysqli_query($conn, "SELECT * FROM distributor");
+    $result_role2 = mysqli_query($conn, "SELECT * FROM petani");
     $total_role2 = mysqli_num_rows($result_role2);
     $total_page_role2 = ceil($total_role2 / $data_role2);
     $page_role2 = isset($_GET["page"]) ? (int)$_GET["page"] : 1;
     $awal_data_role2 = ($page_role2 > 1) ? ($page_role2 * $data_role2) - $data_role2 : 0;
-    $distributor = mysqli_query($conn, "SELECT * FROM distributor ORDER BY id_distributor DESC LIMIT $awal_data_role2, $data_role2");
-    $select_distributor = mysqli_query($conn, "SELECT * FROM users WHERE id_role='4'");
-    if (isset($_POST['add-distributor'])) {
-      if (add_distributor($_POST) > 0) {
-        $_SESSION['message-success'] = "Distributor " . $_POST['nama'] . " berhasil di tambahkan.";
+    $petani = mysqli_query($conn, "SELECT * FROM petani ORDER BY id_petani DESC LIMIT $awal_data_role2, $data_role2");
+    $select_petani = mysqli_query($conn, "SELECT * FROM users WHERE id_role='4'");
+    if (isset($_POST['add-petani'])) {
+      if (add_petani($_POST) > 0) {
+        $_SESSION['message-success'] = "Petani " . $_POST['nama'] . " berhasil di tambahkan.";
         $_SESSION['time-message'] = time();
         header("Location: " . $_SESSION['page-url']);
         exit();
       }
     }
-    if (isset($_POST['delete-distributor'])) {
-      if (delete_distributor($_POST) > 0) {
-        $_SESSION['message-success'] = "Distributor " . $_POST['nama'] . " berhasil di hapus.";
+    if (isset($_POST['delete-petani'])) {
+      if (delete_petani($_POST) > 0) {
+        $_SESSION['message-success'] = "Petani " . $_POST['nama'] . " berhasil di hapus.";
         $_SESSION['time-message'] = time();
         header("Location: " . $_SESSION['page-url']);
         exit();
@@ -109,7 +109,7 @@ if (isset($_SESSION['data-user'])) {
     $total_page_role3 = ceil($total_role3 / $data_role3);
     $page_role3 = isset($_GET["page"]) ? (int)$_GET["page"] : 1;
     $awal_data_role3 = ($page_role3 > 1) ? ($page_role3 * $data_role3) - $data_role3 : 0;
-    $produk = mysqli_query($conn, "SELECT * FROM produk JOIN distributor ON produk.id_distributor=distributor.id_distributor JOIN satuan ON produk.id_satuan=satuan.id_satuan ORDER BY produk.id_produk DESC LIMIT $awal_data_role3, $data_role3");
+    $produk = mysqli_query($conn, "SELECT * FROM produk JOIN petani ON produk.id_petani=petani.id_petani JOIN satuan ON produk.id_satuan=satuan.id_satuan ORDER BY produk.id_produk DESC LIMIT $awal_data_role3, $data_role3");
 
     $data_role4 = 25;
     $result_role4 = mysqli_query($conn, "SELECT * FROM penjualan_detail");
@@ -164,7 +164,7 @@ if (isset($_SESSION['data-user'])) {
     }
 
     if ($_SESSION['data-user']['role'] == 2) {
-      $distributor = mysqli_query($conn, "SELECT * FROM distributor");
+      $petani = mysqli_query($conn, "SELECT * FROM petani");
       $satuan = mysqli_query($conn, "SELECT * FROM satuan");
 
       $data_role3 = 25;
@@ -173,7 +173,7 @@ if (isset($_SESSION['data-user'])) {
       $total_page_role3 = ceil($total_role3 / $data_role3);
       $page_role3 = isset($_GET["page"]) ? (int)$_GET["page"] : 1;
       $awal_data_role3 = ($page_role3 > 1) ? ($page_role3 * $data_role3) - $data_role3 : 0;
-      $produk = mysqli_query($conn, "SELECT * FROM produk JOIN distributor ON produk.id_distributor=distributor.id_distributor JOIN satuan ON produk.id_satuan=satuan.id_satuan WHERE produk.id_penjual='$idUser' ORDER BY produk.id_produk DESC LIMIT $awal_data_role3, $data_role3");
+      $produk = mysqli_query($conn, "SELECT * FROM produk JOIN petani ON produk.id_petani=petani.id_petani JOIN satuan ON produk.id_satuan=satuan.id_satuan WHERE produk.id_pengepul='$idUser' ORDER BY produk.id_produk DESC LIMIT $awal_data_role3, $data_role3");
       if (isset($_POST['add-produk'])) {
         if (add_produk($_POST) > 0) {
           $_SESSION['message-success'] = "Produk baru berhasil di tambahkan.";
@@ -194,7 +194,7 @@ if (isset($_SESSION['data-user'])) {
         JOIN produk ON penjualan_detail.id_produk=produk.id_produk
         JOIN satuan ON produk.id_satuan=satuan.id_satuan
         JOIN users ON penjualan.id_pembeli=users.id_user
-        WHERE produk.id_penjual='$idUser' 
+        WHERE produk.id_pengepul='$idUser' 
         ORDER BY penjualan_detail.id_detail 
         DESC LIMIT $awal_data_role4, $data_role4
       ");
@@ -205,7 +205,7 @@ if (isset($_SESSION['data-user'])) {
         JOIN produk ON penjualan_detail.id_produk=produk.id_produk
         JOIN satuan ON produk.id_satuan=satuan.id_satuan
         JOIN users ON penjualan.id_pembeli=users.id_user
-        WHERE produk.id_penjual='$idUser' 
+        WHERE produk.id_pengepul='$idUser' 
         ORDER BY penjualan_detail.id_detail DESC
       ");
     }
@@ -235,8 +235,8 @@ if (isset($_SESSION['data-user'])) {
       if (isset($_GET['id-buy'])) {
         $id_buy = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $_GET['id-buy']))));
         $proses_pembayaran = mysqli_query($conn, "SELECT * FROM produk
-          JOIN users ON produk.id_penjual=users.id_user
-          JOIN distributor ON produk.id_distributor=distributor.id_distributor
+          JOIN users ON produk.id_pengepul=users.id_user
+          JOIN petani ON produk.id_petani=petani.id_petani
           JOIN satuan ON produk.id_satuan=satuan.id_satuan
           WHERE produk.kode_produk='$id_buy'
         ");
@@ -260,7 +260,7 @@ if (isset($_SESSION['data-user'])) {
         JOIN penjualan ON penjualan_detail.id_penjualan=penjualan.id_penjualan
         JOIN produk ON penjualan_detail.id_produk=produk.id_produk
         JOIN satuan ON produk.id_satuan=satuan.id_satuan
-        JOIN users ON produk.id_penjual=users.id_user
+        JOIN users ON produk.id_pengepul=users.id_user
         WHERE penjualan.id_pembeli='$idUser' ORDER BY penjualan_detail.id_detail DESC LIMIT $awal_data_role5, $data_role5
       ");
 
@@ -271,7 +271,7 @@ if (isset($_SESSION['data-user'])) {
       $page_role6 = isset($_GET["page"]) ? (int)$_GET["page"] : 1;
       $awal_data_role6 = ($page_role6 > 1) ? ($page_role6 * $data_role6) - $data_role6 : 0;
       $produk = mysqli_query($conn, "SELECT * FROM produk 
-        JOIN distributor ON produk.id_distributor=distributor.id_distributor 
+        JOIN petani ON produk.id_petani=petani.id_petani 
         JOIN satuan ON produk.id_satuan=satuan.id_satuan 
         ORDER BY produk.id_produk DESC LIMIT $awal_data_role6, $data_role6
       ");
@@ -292,7 +292,7 @@ if (isset($_SESSION['data-user'])) {
       }
     }
     
-    $produkOverview = mysqli_query($conn, "SELECT * FROM produk JOIN distributor ON produk.id_distributor=distributor.id_distributor JOIN satuan ON produk.id_satuan=satuan.id_satuan ORDER BY produk.id_produk DESC LIMIT 15");
+    $produkOverview = mysqli_query($conn, "SELECT * FROM produk JOIN petani ON produk.id_petani=petani.id_petani JOIN satuan ON produk.id_satuan=satuan.id_satuan ORDER BY produk.id_produk DESC LIMIT 15");
 
     if ($_SESSION['data-user']['role'] == 4) {
       $data_role3 = 25;
@@ -302,9 +302,9 @@ if (isset($_SESSION['data-user'])) {
       $page_role3 = isset($_GET["page"]) ? (int)$_GET["page"] : 1;
       $awal_data_role3 = ($page_role3 > 1) ? ($page_role3 * $data_role3) - $data_role3 : 0;
       $produk = mysqli_query($conn, "SELECT * FROM produk 
-        JOIN distributor ON produk.id_distributor=distributor.id_distributor 
+        JOIN petani ON produk.id_petani=petani.id_petani 
         JOIN satuan ON produk.id_satuan=satuan.id_satuan 
-        WHERE distributor.id_user='$idUser' 
+        WHERE petani.id_user='$idUser' 
         ORDER BY produk.id_produk 
         DESC LIMIT $awal_data_role3, $data_role3
       ");
@@ -318,10 +318,10 @@ if (isset($_SESSION['data-user'])) {
       $penjualan = mysqli_query($conn, "SELECT * FROM penjualan_detail 
         JOIN penjualan ON penjualan_detail.id_penjualan=penjualan.id_penjualan
         JOIN produk ON penjualan_detail.id_produk=produk.id_produk
-        JOIN distributor ON produk.id_distributor=distributor.id_distributor 
+        JOIN petani ON produk.id_petani=petani.id_petani 
         JOIN satuan ON produk.id_satuan=satuan.id_satuan
         JOIN users ON penjualan.id_pembeli=users.id_user
-        WHERE distributor.id_user='$idUser' 
+        WHERE petani.id_user='$idUser' 
         ORDER BY penjualan_detail.id_detail 
         DESC LIMIT $awal_data_role4, $data_role4
       ");
@@ -330,10 +330,10 @@ if (isset($_SESSION['data-user'])) {
         JOIN penjualan ON penjualan_detail.id_penjualan=penjualan.id_penjualan
         JOIN pembayaran ON penjualan.id_penjualan=pembayaran.id_penjualan
         JOIN produk ON penjualan_detail.id_produk=produk.id_produk
-        JOIN distributor ON produk.id_distributor=distributor.id_distributor 
+        JOIN petani ON produk.id_petani=petani.id_petani 
         JOIN satuan ON produk.id_satuan=satuan.id_satuan
         JOIN users ON penjualan.id_pembeli=users.id_user
-        WHERE distributor.id_user='$idUser' 
+        WHERE petani.id_user='$idUser' 
         ORDER BY penjualan_detail.id_detail DESC
       ");
     }

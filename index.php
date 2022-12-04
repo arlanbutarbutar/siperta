@@ -171,7 +171,7 @@ $_SESSION['actual-link'] = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
                 <p class="h6 text-decoration-none text-truncate pt-4"><?= $row['nama_produk'] ?></p>
                 <h5 class="text-primary mt-n2">Rp. <?= number_format($row['harga']) ?></h5>
                 <p>Stok <?= $row['stok'] . " " . $row['satuan'] ?></p>
-                <p class="pb-2"><?= $row['nama_distributor'] . " - " . $row['lokasi'] ?></p>
+                <p class="pb-2"><?= $row['nama_petani'] . " - " . $row['lokasi'] ?></p>
               </div>
             </div>
           </div>

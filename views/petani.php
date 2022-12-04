@@ -5,7 +5,7 @@ if ($_SESSION['data-user']['role'] != 1) {
   exit();
 }
 $_SESSION['page-name'] = "Kelola Petani";
-$_SESSION['page-url'] = "distributor";
+$_SESSION['page-url'] = "petani";
 ?>
 
 <!DOCTYPE html>
@@ -35,7 +35,7 @@ $_SESSION['page-url'] = "distributor";
           <div class="row">
             <div class="col-lg-3">
               <div class="card card-rounded mt-3">
-                <img src="../assets/images/distributor.png" class="card-img-top" alt="">
+                <img src="../assets/images/petani.png" class="card-img-top" alt="">
                 <div class="card-body text-center">
                   <h5 class="card-title">Tambah Petani</h5>
                   <form action="" method="post">
@@ -43,12 +43,12 @@ $_SESSION['page-url'] = "distributor";
                       <label for="nama" class="form-label">Nama</label>
                       <select class="form-select" name="id-user" id="nama" aria-label="Default select example" required>
                         <option selected value="">Pilih Petani</option>
-                        <?php foreach ($select_distributor as $row_dis) : ?>
+                        <?php foreach ($select_petani as $row_dis) : ?>
                           <option value="<?= $row_dis['id_user'] ?>"><?= $row_dis['username'] ?></option>
                         <?php endforeach; ?>
                       </select>
                     </div>
-                    <button type="submit" name="add-distributor" class="btn btn-primary mt-3">Tambah</button>
+                    <button type="submit" name="add-petani" class="btn btn-primary mt-3">Tambah</button>
                   </form>
                 </div>
               </div>
@@ -67,35 +67,35 @@ $_SESSION['page-url'] = "distributor";
                           </tr>
                         </thead>
                         <tbody id="search-page">
-                          <?php if (mysqli_num_rows($distributor) == 0) { ?>
+                          <?php if (mysqli_num_rows($petani) == 0) { ?>
                             <tr>
                               <td colspan="5">Belum ada data petani</td>
                             </tr>
-                            <?php } else if (mysqli_num_rows($distributor) > 0) {
-                            while ($row = mysqli_fetch_assoc($distributor)) { ?>
+                            <?php } else if (mysqli_num_rows($petani) > 0) {
+                            while ($row = mysqli_fetch_assoc($petani)) { ?>
                               <tr>
-                                <td><?= $row['nama_distributor'] ?></td>
+                                <td><?= $row['nama_petani'] ?></td>
                                 <td><?= $row['lokasi'] ?></td>
                                 <td>
-                                  <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#hapus<?= $row['id_distributor'] ?>">
+                                  <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#hapus<?= $row['id_petani'] ?>">
                                     <i class="mdi mdi-delete"></i>
                                   </button>
-                                  <div class="modal fade" id="hapus<?= $row['id_distributor'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                  <div class="modal fade" id="hapus<?= $row['id_petani'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog">
                                       <div class="modal-content">
                                         <div class="modal-header border-bottom-0">
-                                          <h5 class="modal-title" id="exampleModalLabel"><?= $row['nama_distributor'] ?></h5>
+                                          <h5 class="modal-title" id="exampleModalLabel"><?= $row['nama_petani'] ?></h5>
                                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                          Anda yakin ingin menghapus <?= $row['nama_distributor'] ?> ini?
+                                          Anda yakin ingin menghapus <?= $row['nama_petani'] ?> ini?
                                         </div>
                                         <div class="modal-footer justify-content-center border-top-0">
                                           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                                           <form action="" method="POST">
-                                            <input type="hidden" name="id-distributor" value="<?= $row['id_distributor'] ?>">
-                                            <input type="hidden" name="nama" value="<?= $row['nama_distributor'] ?>">
-                                            <button type="submit" name="delete-distributor" class="btn btn-danger">Hapus</button>
+                                            <input type="hidden" name="id-petani" value="<?= $row['id_petani'] ?>">
+                                            <input type="hidden" name="nama" value="<?= $row['nama_petani'] ?>">
+                                            <button type="submit" name="delete-petani" class="btn btn-danger">Hapus</button>
                                           </form>
                                         </div>
                                       </div>

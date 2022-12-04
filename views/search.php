@@ -110,50 +110,50 @@ if ($_SESSION['page-url'] == "users") {
     <?php }
   }
 }
-if ($_SESSION['page-url'] == "distributor") {
+if ($_SESSION['page-url'] == "petani") {
   if (isset($_GET['key']) && $_GET['key'] != "") {
     $key = addslashes(trim($_GET['key']));
     $keys = explode(" ", $key);
     $quer = "";
     foreach ($keys as $no => $data) {
       $data = strtolower($data);
-      $quer .= "nama_distributor LIKE '%$data%' OR lokasi LIKE '%$data%'";
+      $quer .= "nama_petani LIKE '%$data%' OR lokasi LIKE '%$data%'";
       if ($no + 1 < count($keys)) {
         $quer .= " OR ";
       }
     }
-    $query = "SELECT * FROM distributor WHERE $quer ORDER BY id_distributor DESC LIMIT 100";
-    $distributor = mysqli_query($conn, $query);
+    $query = "SELECT * FROM petani WHERE $quer ORDER BY id_petani DESC LIMIT 100";
+    $petani = mysqli_query($conn, $query);
   }
-  if (mysqli_num_rows($distributor) == 0) { ?>
+  if (mysqli_num_rows($petani) == 0) { ?>
     <tr>
       <td colspan="5">Belum ada data petani</td>
     </tr>
-    <?php } else if (mysqli_num_rows($distributor) > 0) {
-    while ($row = mysqli_fetch_assoc($distributor)) { ?>
+    <?php } else if (mysqli_num_rows($petani) > 0) {
+    while ($row = mysqli_fetch_assoc($petani)) { ?>
       <tr>
-        <td><?= $row['nama_distributor'] ?></td>
+        <td><?= $row['nama_petani'] ?></td>
         <td><?= $row['lokasi'] ?></td>
         <td>
-          <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#hapus<?= $row['id_distributor'] ?>">
+          <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#hapus<?= $row['id_petani'] ?>">
             <i class="mdi mdi-delete"></i>
           </button>
-          <div class="modal fade" id="hapus<?= $row['id_distributor'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal fade" id="hapus<?= $row['id_petani'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header border-bottom-0">
-                  <h5 class="modal-title" id="exampleModalLabel"><?= $row['nama_distributor'] ?></h5>
+                  <h5 class="modal-title" id="exampleModalLabel"><?= $row['nama_petani'] ?></h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                  Anda yakin ingin menghapus <?= $row['nama_distributor'] ?> ini?
+                  Anda yakin ingin menghapus <?= $row['nama_petani'] ?> ini?
                 </div>
                 <div class="modal-footer justify-content-center border-top-0">
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                   <form action="" method="POST">
-                    <input type="hidden" name="id-distributor" value="<?= $row['id_distributor'] ?>">
-                    <input type="hidden" name="nama" value="<?= $row['nama_distributor'] ?>">
-                    <button type="submit" name="delete-distributor" class="btn btn-danger">Hapus</button>
+                    <input type="hidden" name="id-petani" value="<?= $row['id_petani'] ?>">
+                    <input type="hidden" name="nama" value="<?= $row['nama_petani'] ?>">
+                    <button type="submit" name="delete-petani" class="btn btn-danger">Hapus</button>
                   </form>
                 </div>
               </div>
@@ -176,7 +176,7 @@ if ($_SESSION['page-url'] == "penjualan") {
         $quer .= " OR ";
       }
     }
-    $query = "SELECT * FROM penjualan_detail JOIN penjualan ON penjualan_detail.id_penjualan=penjualan.id_penjualan JOIN produk ON penjualan_detail.id_produk=produk.id_produk JOIN satuan ON produk.id_satuan=satuan.id_satuan JOIN users ON penjualan.id_pembeli=users.id_user WHERE produk.id_penjual='$idUser' AND $quer ORDER BY penjualan_detail.id_detail DESC LIMIT 100";
+    $query = "SELECT * FROM penjualan_detail JOIN penjualan ON penjualan_detail.id_penjualan=penjualan.id_penjualan JOIN produk ON penjualan_detail.id_produk=produk.id_produk JOIN satuan ON produk.id_satuan=satuan.id_satuan JOIN users ON penjualan.id_pembeli=users.id_user WHERE produk.id_pengepul='$idUser' AND $quer ORDER BY penjualan_detail.id_detail DESC LIMIT 100";
     $penjualan = mysqli_query($conn, $query);
   }
   if (mysqli_num_rows($penjualan) == 0) { ?>
@@ -227,7 +227,7 @@ if ($_SESSION['page-url'] == "produk") {
     foreach ($keys as $no => $data) {
       $data = strtolower($data);
       if ($_SESSION['data-user']['role'] == 2) {
-        $quer .= "produk.id_penjual='$idUser' AND produk.nama_produk LIKE '%$data%'";
+        $quer .= "produk.id_pengepul='$idUser' AND produk.nama_produk LIKE '%$data%'";
       } else if ($_SESSION['data-user']['role'] == 3) {
         $quer .= "produk.nama_produk LIKE '%$data%'";
       }
@@ -235,7 +235,7 @@ if ($_SESSION['page-url'] == "produk") {
         $quer .= " OR ";
       }
     }
-    $query = "SELECT * FROM produk JOIN distributor ON produk.id_distributor=distributor.id_distributor JOIN satuan ON produk.id_satuan=satuan.id_satuan WHERE $quer ORDER BY produk.id_produk DESC LIMIT 100";
+    $query = "SELECT * FROM produk JOIN petani ON produk.id_petani=petani.id_petani JOIN satuan ON produk.id_satuan=satuan.id_satuan WHERE $quer ORDER BY produk.id_produk DESC LIMIT 100";
     $produk = mysqli_query($conn, $query);
   }
   if ($_SESSION['data-user']['role'] <= 2 || $_SESSION['data-user']['role'] == 4) {
@@ -257,7 +257,7 @@ if ($_SESSION['page-url'] == "produk") {
           </td>
           <td>Rp. <?= number_format($row['harga']) ?></td>
           <td><?= $row['stok'] . " " . $row['satuan'] ?></td>
-          <td><?= $row['nama_distributor'] . " (" . $row['lokasi'] . ")" ?></td>
+          <td><?= $row['nama_petani'] . " (" . $row['lokasi'] . ")" ?></td>
           <td>
             <div class="badge badge-opacity-success">
               <?php $dateCreate = date_create($row['created_at']);
@@ -314,14 +314,14 @@ if ($_SESSION['page-url'] == "produk") {
                           </select>
                         </div>
                         <div class="mb-3">
-                          <label for="distributor" class="form-label">Petani</label>
-                          <select name="id-distributor" id="distributor" class="form-select" aria-label="Default select example" required>
-                            <option selected value="<?= $row['id_distributor'] ?>"><?= $row['nama_distributor'] ?></option>
-                            <?php $id_distributor = $row['id_distributor'];
-                            $takeDistributor = mysqli_query($conn, "SELECT * FROM distributor WHERE id_distributor!='$id_distributor'");
-                            if (mysqli_num_rows($takeDistributor) > 0) {
-                              while ($rowDistributor = mysqli_fetch_assoc($takeDistributor)) { ?>
-                                <option value="<?= $rowDistributor['id_distributor'] ?>"><?= $rowDistributor['nama_distributor'] . ' (Lokasi: ' . $rowDistributor['lokasi'] . ')' ?></option>
+                          <label for="petani" class="form-label">Petani</label>
+                          <select name="id-petani" id="petani" class="form-select" aria-label="Default select example" required>
+                            <option selected value="<?= $row['id_petani'] ?>"><?= $row['nama_petani'] ?></option>
+                            <?php $id_petani = $row['id_petani'];
+                            $takepetani = mysqli_query($conn, "SELECT * FROM petani WHERE id_petani!='$id_petani'");
+                            if (mysqli_num_rows($takepetani) > 0) {
+                              while ($rowpetani = mysqli_fetch_assoc($takepetani)) { ?>
+                                <option value="<?= $rowpetani['id_petani'] ?>"><?= $rowpetani['nama_petani'] . ' (Lokasi: ' . $rowpetani['lokasi'] . ')' ?></option>
                             <?php }
                             } ?>
                           </select>
@@ -381,7 +381,7 @@ if ($_SESSION['page-url'] == "produk") {
               <h3 class="card-title">Rp. <?= number_format($row['harga']) ?></h3>
               <p><?= $row['deskripsi'] ?></p>
               <p>Stok <?= $row['stok'] . " " . $row['satuan'] ?></p>
-              <p><i class="mdi mdi-map-marker"></i> <?= $row['lokasi'] . " (" . $row['nama_distributor'] . ")" ?></p>
+              <p><i class="mdi mdi-map-marker"></i> <?= $row['lokasi'] . " (" . $row['nama_petani'] . ")" ?></p>
               <div class="d-flex">
                 <a href="pembayaran?id-buy=<?= $row['kode_produk'] ?>" class="btn btn-primary">Beli</a>
               </div>

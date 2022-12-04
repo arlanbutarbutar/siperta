@@ -85,7 +85,7 @@ $_SESSION['page-name'] = "Pembayaran";
                               <p><strong>Deskripsi:</strong> <?= $row_proBuy['deskripsi'] ?></p>
                               <p><strong>Harga:</strong> Rp. <?= number_format($row_proBuy['harga']) ?></p>
                               <p><strong>Stok:</strong> <?= $row_proBuy['stok'] . " " . $row_proBuy['satuan'] ?></p>
-                              <p><strong>Lokasi:</strong> <i class="mdi mdi-map-marker"></i> <?= $row_proBuy['lokasi'] . " (" . $row_proBuy['nama_distributor'] . ")" ?></p>
+                              <p><strong>Lokasi:</strong> <i class="mdi mdi-map-marker"></i> <?= $row_proBuy['lokasi'] . " (" . $row_proBuy['nama_petani'] . ")" ?></p>
                             </div>
                             <div class="col">
                               <h4>Kontak Penjual</h4>

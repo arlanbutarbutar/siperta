@@ -78,13 +78,13 @@ if (isset($_SESSION['data-user'])) {
       mysqli_query($conn, "DELETE FROM users WHERE id_user='$id_user'");
       return mysqli_affected_rows($conn);
     }
-    function add_distributor($data)
+    function add_petani($data)
     {
       global $conn;
       $id_user = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-user']))));
-      $checkNama = mysqli_query($conn, "SELECT * FROM distributor WHERE id_user='$id_user'");
+      $checkNama = mysqli_query($conn, "SELECT * FROM petani WHERE id_user='$id_user'");
       if (mysqli_num_rows($checkNama) > 0) {
-        $_SESSION['message-danger'] = "Maaf, nama distributor yang anda masukan sudah ada.";
+        $_SESSION['message-danger'] = "Maaf, nama petani yang anda masukan sudah ada.";
         $_SESSION['time-message'] = time();
         return false;
       }else{
@@ -92,15 +92,15 @@ if (isset($_SESSION['data-user'])) {
         $row=mysqli_fetch_assoc($takeUser);
         $nama=$row['username'];
         $lokasi=$row['alamat'];
-        mysqli_query($conn, "INSERT INTO distributor(id_user,nama_distributor,lokasi) VALUES('$id_user','$nama','$lokasi')");
+        mysqli_query($conn, "INSERT INTO petani(id_user,nama_petani,lokasi) VALUES('$id_user','$nama','$lokasi')");
       }
       return mysqli_affected_rows($conn);
     }
-    function delete_distributor($data)
+    function delete_petani($data)
     {
       global $conn;
-      $id_distributor = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-distributor']))));
-      mysqli_query($conn, "DELETE FROM distributor WHERE id_distributor='$id_distributor'");
+      $id_petani = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-petani']))));
+      mysqli_query($conn, "DELETE FROM petani WHERE id_petani='$id_petani'");
       return mysqli_affected_rows($conn);
     }
   }
@@ -149,13 +149,13 @@ if (isset($_SESSION['data-user'])) {
       } else {
         $image = $img_produk;
       }
-      $id_distributor = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-distributor']))));
+      $id_petani = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-petani']))));
       $nama = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['nama']))));
       $harga = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['harga']))));
       $stok = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['stok']))));
       $satuan = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['satuan']))));
       $updated_at = date("Y-m-d " . $time);
-      mysqli_query($conn, "UPDATE produk SET id_distributor='$id_distributor', img_produk='$image', nama_produk='$nama', harga='$harga', stok='$stok', id_satuan='$satuan', updated_at='$updated_at' WHERE id_produk='$id_produk'");
+      mysqli_query($conn, "UPDATE produk SET id_petani='$id_petani', img_produk='$image', nama_produk='$nama', harga='$harga', stok='$stok', id_satuan='$satuan', updated_at='$updated_at' WHERE id_produk='$id_produk'");
       return mysqli_affected_rows($conn);
     }
     function delete_produk($data)
@@ -176,12 +176,12 @@ if (isset($_SESSION['data-user'])) {
         if (!$image) {
           return false;
         }
-        $id_distributor = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-distributor']))));
+        $id_petani = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-petani']))));
         $nama = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['nama']))));
         $harga = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['harga']))));
         $stok = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['stok']))));
         $satuan = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['satuan']))));
-        mysqli_query($conn, "INSERT INTO produk(id_distributor,id_penjual,kode_produk,img_produk,nama_produk,harga,stok,id_satuan) VALUES('$id_distributor','$idUser','$kode_produk','$image','$nama','$harga','$stok','$satuan')");
+        mysqli_query($conn, "INSERT INTO produk(id_petani,id_pengepul,kode_produk,img_produk,nama_produk,harga,stok,id_satuan) VALUES('$id_petani','$idUser','$kode_produk','$image','$nama','$harga','$stok','$satuan')");
         return mysqli_affected_rows($conn);
       }
     }

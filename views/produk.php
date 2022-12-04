@@ -63,11 +63,11 @@ $_SESSION['page-url'] = "produk";
                           </select>
                         </div>
                         <div class="mb-3">
-                          <label for="distributor" class="form-label">Petani</label>
-                          <select name="id-distributor" id="distributor" class="form-select" aria-label="Default select example" required>
+                          <label for="petani" class="form-label">Petani</label>
+                          <select name="id-petani" id="petani" class="form-select" aria-label="Default select example" required>
                             <option selected value="">Pilih Petani</option>
-                            <?php foreach ($distributor as $row_distributor) : ?>
-                              <option value="<?= $row_distributor['id_distributor'] ?>"><?= $row_distributor['nama_distributor'] . ' (Lokasi: ' . $row_distributor['lokasi'] . ')' ?></option>
+                            <?php foreach ($petani as $row_petani) : ?>
+                              <option value="<?= $row_petani['id_petani'] ?>"><?= $row_petani['nama_petani'] . ' (Lokasi: ' . $row_petani['lokasi'] . ')' ?></option>
                             <?php endforeach; ?>
                           </select>
                         </div>
@@ -118,7 +118,7 @@ $_SESSION['page-url'] = "produk";
                                     </td>
                                     <td>Rp. <?= number_format($row['harga']) ?></td>
                                     <td><?= $row['stok'] . " " . $row['satuan'] ?></td>
-                                    <td><?= $row['nama_distributor'] . " (" . $row['lokasi'] . ")" ?></td>
+                                    <td><?= $row['nama_petani'] . " (" . $row['lokasi'] . ")" ?></td>
                                     <td>
                                       <div class="badge badge-opacity-success">
                                         <?php $dateCreate = date_create($row['created_at']);
@@ -175,14 +175,14 @@ $_SESSION['page-url'] = "produk";
                                                     </select>
                                                   </div>
                                                   <div class="mb-3">
-                                                    <label for="distributor" class="form-label">Petani</label>
-                                                    <select name="id-distributor" id="distributor" class="form-select" aria-label="Default select example" required>
-                                                      <option selected value="<?= $row['id_distributor'] ?>"><?= $row['nama_distributor'] ?></option>
-                                                      <?php $id_distributor = $row['id_distributor'];
-                                                      $takeDistributor = mysqli_query($conn, "SELECT * FROM distributor WHERE id_distributor!='$id_distributor'");
-                                                      if (mysqli_num_rows($takeDistributor) > 0) {
-                                                        while ($rowDistributor = mysqli_fetch_assoc($takeDistributor)) { ?>
-                                                          <option value="<?= $rowDistributor['id_distributor'] ?>"><?= $rowDistributor['nama_distributor'] . ' (Lokasi: ' . $rowDistributor['lokasi'] . ')' ?></option>
+                                                    <label for="petani" class="form-label">Petani</label>
+                                                    <select name="id-petani" id="petani" class="form-select" aria-label="Default select example" required>
+                                                      <option selected value="<?= $row['id_petani'] ?>"><?= $row['nama_petani'] ?></option>
+                                                      <?php $id_petani = $row['id_petani'];
+                                                      $takepetani = mysqli_query($conn, "SELECT * FROM petani WHERE id_petani!='$id_petani'");
+                                                      if (mysqli_num_rows($takepetani) > 0) {
+                                                        while ($rowpetani = mysqli_fetch_assoc($takepetani)) { ?>
+                                                          <option value="<?= $rowpetani['id_petani'] ?>"><?= $rowpetani['nama_petani'] . ' (Lokasi: ' . $rowpetani['lokasi'] . ')' ?></option>
                                                       <?php }
                                                       } ?>
                                                     </select>
@@ -301,7 +301,7 @@ $_SESSION['page-url'] = "produk";
                             <h3 class="card-title">Rp. <?= number_format($row['harga']) ?></h3>
                             <p><?= $row['deskripsi'] ?></p>
                             <p>Stok <?= $row['stok'] . " " . $row['satuan'] ?></p>
-                            <p><i class="mdi mdi-map-marker"></i> <?= $row['lokasi'] . " (" . $row['nama_distributor'] . ")" ?></p>
+                            <p><i class="mdi mdi-map-marker"></i> <?= $row['lokasi'] . " (" . $row['nama_petani'] . ")" ?></p>
                             <div class="d-flex">
                               <a href="pembayaran?id-buy=<?= $row['kode_produk'] ?>" class="btn btn-primary">Beli</a>
                             </div>

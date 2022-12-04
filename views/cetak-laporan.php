@@ -20,7 +20,7 @@ if ($_SESSION['data-user']['role'] == 2) {
     JOIN produk ON penjualan_detail.id_produk=produk.id_produk
     JOIN satuan ON produk.id_satuan=satuan.id_satuan
     JOIN users ON penjualan.id_pembeli=users.id_user
-    WHERE produk.id_penjual='$idUser' 
+    WHERE produk.id_pengepul='$idUser' 
     ORDER BY penjualan_detail.id_detail DESC
   ");
 }
@@ -29,10 +29,10 @@ if ($_SESSION['data-user']['role'] == 4) {
     JOIN penjualan ON penjualan_detail.id_penjualan=penjualan.id_penjualan
     JOIN pembayaran ON penjualan.id_penjualan=pembayaran.id_penjualan
     JOIN produk ON penjualan_detail.id_produk=produk.id_produk
-    JOIN distributor ON produk.id_distributor=distributor.id_distributor 
+    JOIN petani ON produk.id_petani=petani.id_petani 
     JOIN satuan ON produk.id_satuan=satuan.id_satuan
     JOIN users ON penjualan.id_pembeli=users.id_user
-    WHERE distributor.id_user='$idUser' 
+    WHERE petani.id_user='$idUser' 
     ORDER BY penjualan_detail.id_detail DESC
   ");
 }
