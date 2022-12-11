@@ -45,11 +45,13 @@ if ($_SESSION['data-user']['role'] == 3) {
                       <a href="./" class="nav-link active ps-0">Ringkasan</a>
                     </li>
                   </ul>
-                  <div>
-                    <div class="btn-wrapper">
-                      <a href="cetak-laporan" class="btn btn-primary text-white me-0"><i class="icon-download"></i> Export</a>
+                  <?php if ($_SESSION['data-user']['role'] == 1) { ?>
+                    <div>
+                      <div class="btn-wrapper">
+                        <a href="cetak-laporan" class="btn btn-primary text-white me-0"><i class="icon-download"></i> Export</a>
+                      </div>
                     </div>
-                  </div>
+                  <?php } ?>
                 </div>
                 <canvas id="myChart" style="width:100%;height: 450px;" class="shadow p-3 mt-3 rounded"></canvas>
                 <?php
@@ -91,40 +93,40 @@ if ($_SESSION['data-user']['role'] == 3) {
                   $desember = mysqli_num_rows($desember);
                 }
                 if ($_SESSION['data-user']['role'] == 2) {
-                  $januari = mysqli_query($conn, "SELECT * FROM penjualan_detail JOIN penjualan ON penjualan_detail.id_penjualan=penjualan.id_penjualan JOIN pembayaran ON penjualan.id_penjualan=pembayaran.id_penjualan JOIN produk ON penjualan_detail.id_produk=produk.id_produk WHERE produk.id_penjual='$idUser' AND month(penjualan_detail.updated_at)='01'");
+                  $januari = mysqli_query($conn, "SELECT * FROM penjualan_detail JOIN penjualan ON penjualan_detail.id_penjualan=penjualan.id_penjualan JOIN pembayaran ON penjualan.id_penjualan=pembayaran.id_penjualan JOIN produk ON penjualan_detail.id_produk=produk.id_produk WHERE produk.id_petani='$idUser' AND month(penjualan_detail.updated_at)='01'");
                   $januari = mysqli_num_rows($januari);
 
-                  $februari = mysqli_query($conn, "SELECT * FROM penjualan_detail JOIN penjualan ON penjualan_detail.id_penjualan=penjualan.id_penjualan JOIN pembayaran ON penjualan.id_penjualan=pembayaran.id_penjualan JOIN produk ON penjualan_detail.id_produk=produk.id_produk WHERE produk.id_penjual='$idUser' AND month(penjualan_detail.updated_at)='02'");
+                  $februari = mysqli_query($conn, "SELECT * FROM penjualan_detail JOIN penjualan ON penjualan_detail.id_penjualan=penjualan.id_penjualan JOIN pembayaran ON penjualan.id_penjualan=pembayaran.id_penjualan JOIN produk ON penjualan_detail.id_produk=produk.id_produk WHERE produk.id_petani='$idUser' AND month(penjualan_detail.updated_at)='02'");
                   $februari = mysqli_num_rows($februari);
 
-                  $maret = mysqli_query($conn, "SELECT * FROM penjualan_detail JOIN penjualan ON penjualan_detail.id_penjualan=penjualan.id_penjualan JOIN pembayaran ON penjualan.id_penjualan=pembayaran.id_penjualan JOIN produk ON penjualan_detail.id_produk=produk.id_produk WHERE produk.id_penjual='$idUser' AND month(penjualan_detail.updated_at)='03'");
+                  $maret = mysqli_query($conn, "SELECT * FROM penjualan_detail JOIN penjualan ON penjualan_detail.id_penjualan=penjualan.id_penjualan JOIN pembayaran ON penjualan.id_penjualan=pembayaran.id_penjualan JOIN produk ON penjualan_detail.id_produk=produk.id_produk WHERE produk.id_petani='$idUser' AND month(penjualan_detail.updated_at)='03'");
                   $maret = mysqli_num_rows($maret);
 
-                  $april = mysqli_query($conn, "SELECT * FROM penjualan_detail JOIN penjualan ON penjualan_detail.id_penjualan=penjualan.id_penjualan JOIN pembayaran ON penjualan.id_penjualan=pembayaran.id_penjualan JOIN produk ON penjualan_detail.id_produk=produk.id_produk WHERE produk.id_penjual='$idUser' AND month(penjualan_detail.updated_at)='04'");
+                  $april = mysqli_query($conn, "SELECT * FROM penjualan_detail JOIN penjualan ON penjualan_detail.id_penjualan=penjualan.id_penjualan JOIN pembayaran ON penjualan.id_penjualan=pembayaran.id_penjualan JOIN produk ON penjualan_detail.id_produk=produk.id_produk WHERE produk.id_petani='$idUser' AND month(penjualan_detail.updated_at)='04'");
                   $april = mysqli_num_rows($april);
 
-                  $mei = mysqli_query($conn, "SELECT * FROM penjualan_detail JOIN penjualan ON penjualan_detail.id_penjualan=penjualan.id_penjualan JOIN pembayaran ON penjualan.id_penjualan=pembayaran.id_penjualan JOIN produk ON penjualan_detail.id_produk=produk.id_produk WHERE produk.id_penjual='$idUser' AND month(penjualan_detail.updated_at)='05'");
+                  $mei = mysqli_query($conn, "SELECT * FROM penjualan_detail JOIN penjualan ON penjualan_detail.id_penjualan=penjualan.id_penjualan JOIN pembayaran ON penjualan.id_penjualan=pembayaran.id_penjualan JOIN produk ON penjualan_detail.id_produk=produk.id_produk WHERE produk.id_petani='$idUser' AND month(penjualan_detail.updated_at)='05'");
                   $mei = mysqli_num_rows($mei);
 
-                  $juni = mysqli_query($conn, "SELECT * FROM penjualan_detail JOIN penjualan ON penjualan_detail.id_penjualan=penjualan.id_penjualan JOIN pembayaran ON penjualan.id_penjualan=pembayaran.id_penjualan JOIN produk ON penjualan_detail.id_produk=produk.id_produk WHERE produk.id_penjual='$idUser' AND month(penjualan_detail.updated_at)='06'");
+                  $juni = mysqli_query($conn, "SELECT * FROM penjualan_detail JOIN penjualan ON penjualan_detail.id_penjualan=penjualan.id_penjualan JOIN pembayaran ON penjualan.id_penjualan=pembayaran.id_penjualan JOIN produk ON penjualan_detail.id_produk=produk.id_produk WHERE produk.id_petani='$idUser' AND month(penjualan_detail.updated_at)='06'");
                   $juni = mysqli_num_rows($juni);
 
-                  $juli = mysqli_query($conn, "SELECT * FROM penjualan_detail JOIN penjualan ON penjualan_detail.id_penjualan=penjualan.id_penjualan JOIN pembayaran ON penjualan.id_penjualan=pembayaran.id_penjualan JOIN produk ON penjualan_detail.id_produk=produk.id_produk WHERE produk.id_penjual='$idUser' AND month(penjualan_detail.updated_at)='07'");
+                  $juli = mysqli_query($conn, "SELECT * FROM penjualan_detail JOIN penjualan ON penjualan_detail.id_penjualan=penjualan.id_penjualan JOIN pembayaran ON penjualan.id_penjualan=pembayaran.id_penjualan JOIN produk ON penjualan_detail.id_produk=produk.id_produk WHERE produk.id_petani='$idUser' AND month(penjualan_detail.updated_at)='07'");
                   $juli = mysqli_num_rows($juli);
 
-                  $agustus = mysqli_query($conn, "SELECT * FROM penjualan_detail JOIN penjualan ON penjualan_detail.id_penjualan=penjualan.id_penjualan JOIN pembayaran ON penjualan.id_penjualan=pembayaran.id_penjualan JOIN produk ON penjualan_detail.id_produk=produk.id_produk WHERE produk.id_penjual='$idUser' AND month(penjualan_detail.updated_at)='08'");
+                  $agustus = mysqli_query($conn, "SELECT * FROM penjualan_detail JOIN penjualan ON penjualan_detail.id_penjualan=penjualan.id_penjualan JOIN pembayaran ON penjualan.id_penjualan=pembayaran.id_penjualan JOIN produk ON penjualan_detail.id_produk=produk.id_produk WHERE produk.id_petani='$idUser' AND month(penjualan_detail.updated_at)='08'");
                   $agustus = mysqli_num_rows($agustus);
 
-                  $september = mysqli_query($conn, "SELECT * FROM penjualan_detail JOIN penjualan ON penjualan_detail.id_penjualan=penjualan.id_penjualan JOIN pembayaran ON penjualan.id_penjualan=pembayaran.id_penjualan JOIN produk ON penjualan_detail.id_produk=produk.id_produk WHERE produk.id_penjual='$idUser' AND month(penjualan_detail.updated_at)='09'");
+                  $september = mysqli_query($conn, "SELECT * FROM penjualan_detail JOIN penjualan ON penjualan_detail.id_penjualan=penjualan.id_penjualan JOIN pembayaran ON penjualan.id_penjualan=pembayaran.id_penjualan JOIN produk ON penjualan_detail.id_produk=produk.id_produk WHERE produk.id_petani='$idUser' AND month(penjualan_detail.updated_at)='09'");
                   $september = mysqli_num_rows($september);
 
-                  $oktober = mysqli_query($conn, "SELECT * FROM penjualan_detail JOIN penjualan ON penjualan_detail.id_penjualan=penjualan.id_penjualan JOIN pembayaran ON penjualan.id_penjualan=pembayaran.id_penjualan JOIN produk ON penjualan_detail.id_produk=produk.id_produk WHERE produk.id_penjual='$idUser' AND month(penjualan_detail.updated_at)='10'");
+                  $oktober = mysqli_query($conn, "SELECT * FROM penjualan_detail JOIN penjualan ON penjualan_detail.id_penjualan=penjualan.id_penjualan JOIN pembayaran ON penjualan.id_penjualan=pembayaran.id_penjualan JOIN produk ON penjualan_detail.id_produk=produk.id_produk WHERE produk.id_petani='$idUser' AND month(penjualan_detail.updated_at)='10'");
                   $oktober = mysqli_num_rows($oktober);
 
-                  $november = mysqli_query($conn, "SELECT * FROM penjualan_detail JOIN penjualan ON penjualan_detail.id_penjualan=penjualan.id_penjualan JOIN pembayaran ON penjualan.id_penjualan=pembayaran.id_penjualan JOIN produk ON penjualan_detail.id_produk=produk.id_produk WHERE produk.id_penjual='$idUser' AND month(penjualan_detail.updated_at)='11'");
+                  $november = mysqli_query($conn, "SELECT * FROM penjualan_detail JOIN penjualan ON penjualan_detail.id_penjualan=penjualan.id_penjualan JOIN pembayaran ON penjualan.id_penjualan=pembayaran.id_penjualan JOIN produk ON penjualan_detail.id_produk=produk.id_produk WHERE produk.id_petani='$idUser' AND month(penjualan_detail.updated_at)='11'");
                   $november = mysqli_num_rows($november);
 
-                  $desember = mysqli_query($conn, "SELECT * FROM penjualan_detail JOIN penjualan ON penjualan_detail.id_penjualan=penjualan.id_penjualan JOIN pembayaran ON penjualan.id_penjualan=pembayaran.id_penjualan JOIN produk ON penjualan_detail.id_produk=produk.id_produk WHERE produk.id_penjual='$idUser' AND month(penjualan_detail.updated_at)='12'");
+                  $desember = mysqli_query($conn, "SELECT * FROM penjualan_detail JOIN penjualan ON penjualan_detail.id_penjualan=penjualan.id_penjualan JOIN pembayaran ON penjualan.id_penjualan=pembayaran.id_penjualan JOIN produk ON penjualan_detail.id_produk=produk.id_produk WHERE produk.id_petani='$idUser' AND month(penjualan_detail.updated_at)='12'");
                   $desember = mysqli_num_rows($desember);
                 }
                 if ($_SESSION['data-user']['role'] == 4) {
