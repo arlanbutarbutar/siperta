@@ -53,7 +53,7 @@ $_SESSION['page-url'] = "daftar";
                 </div>
                 <div class="form-group">
                   <label for="jenis-kelamin">Jenis Kelamin</label>
-                  <select name="jenis-kelamin" id="jenis-kelamin" class="form-control form-control-lg" required>
+                  <select name="jenis-kelamin" id="jenis-kelamin" class="form-control form-control-lg text-dark" required>
                     <?php if (!isset($_POST['jenis-kelamin'])) { ?>
                       <option value="">Pilih Jenis Kelamin</option>
                       <option value='Pria'>Pria</option>
@@ -84,6 +84,15 @@ $_SESSION['page-url'] = "daftar";
                   <input type="text" name="alamat" id="alamat" value="<?php if (isset($_POST['alamat'])) {
                                                                         echo $_POST['alamat'];
                                                                       } ?>" placeholder="Alamat" class="form-control form-control-lg" minlength="5" required>
+                </div>
+                <div class="form-group">
+                  <label for="role">Sebagai Apa?</label>
+                  <select name="id-role" class="form-select text-dark" aria-label="Default select example" required>
+                    <option selected value="">Pilih Sebagai Apa?</option>
+                    <?php foreach ($select_role as $data_role) : ?>
+                      <option value="<?= $data_role['id_role'] ?>"><?= $data_role['roles'] ?></option>
+                    <?php endforeach; ?>
+                  </select>
                 </div>
                 <div class="mt-3">
                   <button type="submit" name="daftar" class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">Daftar</button>

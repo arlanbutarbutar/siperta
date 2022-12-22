@@ -98,11 +98,13 @@ $_SESSION['page-name'] = "Pembayaran";
                             <h4>Data Pembelian</h4>
                             <div class="mb-3">
                               <label for="keterangan" class="form-label">Keterangan</label>
-                              <input type="text" name="ket" class="form-control" id="keterangan" placeholder="Keterangan">
+                              <textarea name="ket" id="keterangan" class="form-control" placeholder="Keterangan" cols="30" style="height: 70px;"></textarea>
+                              <small class="text-success">Masukan keterangan seperti ekspedisi pengiriman menggunakan apa atau produk diambil sendiri (Optional)</small>
                             </div>
                             <div class="mb-3">
                               <label for="Jumlah Pembelian" class="form-label">Jumlah Pembelian <small>(per <?= $row_proBuy['satuan'] ?>)</small></label>
                               <input type="number" name="jumlah-beli" class="form-control" id="Jumlah Pembelian" placeholder="Jumlah Pembelian" required>
+                              <small class="text-success">Masukan berapa banyak yang ingin anda beli dalam <?= $row_proBuy['satuan'] ?></small>
                             </div>
                             <input type="hidden" name="id-produk" value="<?= $row_proBuy['id_produk'] ?>">
                             <input type="hidden" name="id-penjual" value="<?= $row_proBuy['id_user'] ?>">
@@ -119,11 +121,13 @@ $_SESSION['page-name'] = "Pembayaran";
                               <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Warning:">
                                 <use xlink:href="#exclamation-triangle-fill" />
                               </svg>
-                              <div>
-                                Perhatian!!, sebelum anda membeli disarankan untuk menanyakan stok apakah masih ada atau tidak.
+                              <div class="text-dark">
+                                Perhatian!!, sebelum anda membeli disarankan untuk menanyakan ketersedian barang <a href="https://api.whatsapp.com/send/?phone=62<?= $row_proBuy['telpon'] ?>&text=Halo <?= $userName ?>&type=phone_number&app_absent=0" target="_blank">disini</a> sebelum membeli. Jika anda sudah yakin bisa <strong>Beli Sekarang</strong>. <br><br>
+                                Setelah anda melakukan pembelian, segera konfirmasi pembayaran anda pada halaman pembayaran lalu klik tombol <button type="button" class="btn btn-success btn-sm rounded-1">Lihat Status</button> dan klik <button type="button" class="btn btn-success btn-sm rounded-1">konfirmasi bayar</button>. <br>
+                                Jika sudah, maka pembayaran anda sedang dalam proses validasi oleh admin dan jika telah dinyatakan valid maka pembayaran anda telah <span class="text-success">Lunas</span>, dan jika tidak valid anda harus memasukan ulang bukti pembayaran yang benar.
                               </div>
                             </div>
-                            <button type="submit" name="buy-product" class="btn btn-primary mt-3">Konfirmasi Beli</button>
+                            <button type="submit" name="buy-product" class="btn btn-primary mt-3">Beli Sekarang</button>
                           </form>
                         </div>
                       </div>
@@ -172,11 +176,11 @@ $_SESSION['page-name'] = "Pembayaran";
                                     <td>Rp. <?= number_format($row['harga']) ?></td>
                                     <td>Rp. <?= number_format($row['total']) ?></td>
                                     <td>
-                                      <button type="button" class="btn btn-link text-decoration-none" data-bs-toggle="modal" data-bs-target="#status-bayar<?= $row['id_detail'] ?>">
+                                      <button type="button" class="btn btn-success border-0 text-white text-decoration-none" data-bs-toggle="modal" data-bs-target="#status-bayar<?= $row['id_detail'] ?>">
                                         Lihat Status
                                       </button>
                                       <div class="modal fade" id="status-bayar<?= $row['id_detail'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-xl">
+                                        <div class="modal-dialog">
                                           <div class="modal-content">
                                             <div class="modal-header border-bottom-0">
                                               <h5 class="modal-title" id="exampleModalLabel">#<?= $row['kode_pembelian'] ?> Status Bayar</h5>
@@ -201,7 +205,7 @@ $_SESSION['page-name'] = "Pembayaran";
                                                       <p><?= $row['telpon'] ?></p>
                                                       <h6 class="mt-3">Metode Pembayaran</h6>
                                                       <p><?= $row['bank'] . ' - ' . $row['norek'] ?></p>
-                                                      <a href="pembayaran?confirm-pay=<?= $row['kode_pembelian'] ?>" class="btn btn-link text-decoration-none">Konfirmasi Bayar</a>
+                                                      <a href="pembayaran?confirm-pay=<?= $row['kode_pembelian'] ?>" class="btn btn-success text-white text-decoration-none">Konfirmasi Bayar</a>
                                                   </div>
                                                   <div class="col-lg-8">
                                                     <div class="card mt-3">
@@ -228,23 +232,68 @@ $_SESSION['page-name'] = "Pembayaran";
                                                   </div>
                                                 </div>
                                                 <?php } else if (mysqli_num_rows($status_pembayaran) > 0) {
-                                                while ($row_status = mysqli_fetch_assoc($status_pembayaran)) { ?>
-                                                  <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-                                                    <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
-                                                      <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                                    </symbol>
-                                                  </svg>
-                                                  <div class="alert alert-success d-flex align-items-center" role="alert">
-                                                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">
-                                                      <use xlink:href="#check-circle-fill" />
+                                                while ($row_status = mysqli_fetch_assoc($status_pembayaran)) {
+                                                  if ($row_status['status_bayar'] == 3) { ?>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                                                      <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+                                                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                                                      </symbol>
                                                     </svg>
-                                                    <div>
-                                                      Pembayaran anda telah <strong>Lunas</strong>.
+                                                    <div class="alert alert-warning d-flex align-items-center" role="alert">
+                                                      <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">
+                                                        <use xlink:href="#check-circle-fill" />
+                                                      </svg>
+                                                      <div>
+                                                        Pembayaran anda sedang <strong>divalidasi</strong> oleh admin.
+                                                      </div>
                                                     </div>
-                                                  </div>
-                                                  <p>Metode pembayaran <strong>Tunai</strong> dengan bukti pembayaran sebagai berikut:</p>
-                                                  <img src="../assets/images/pembayaran/<?= $row_status['bukti_bayar'] ?>" style="width: 100%;height: 100%;" class="mt-3" alt="">
+                                                    <p>Metode pembayaran <strong>Tunai</strong> dengan bukti pembayaran sebagai berikut:</p>
+                                                    <img src="../assets/images/pembayaran/<?= $row_status['bukti_bayar'] ?>" style="width: 100%;height: 100%;" class="mt-3" alt="">
+                                                  <?php } else if ($row_status['status_bayar'] == 2) { ?>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                                                      <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+                                                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                                                      </symbol>
+                                                    </svg>
+                                                    <div class="alert alert-danger d-flex align-items-center" role="alert">
+                                                      <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">
+                                                        <use xlink:href="#check-circle-fill" />
+                                                      </svg>
+                                                      <div>
+                                                        Pembayaran anda <strong>ditolak</strong>, silakan masukan ulang bukti<br> pembayaran yang benar.
+                                                      </div>
+                                                    </div>
+                                                    <form action="" method="post" enctype="multipart/form-data" class="mt-5">
+                                                      <div class="d-flex flex-nowrap">
+                                                        <div class="mb-3">
+                                                          <input class="form-control" type="file" name="image" id="formFile" required>
+                                                        </div>
+                                                        <button type="submit" name="confirm-try" class="btn btn-primary btn-sm text-white rounded-0" style="height: 32px;">Konfirmasi Ulang</button>
+                                                      </div>
+                                                      <input type="hidden" name="imageOld" value="<?= $row_status['bukti_bayar'] ?>">
+                                                      <input type="hidden" name="id-bayar" value="<?= $row_status['id_bayar'] ?>">
+                                                    </form>
+                                                    <hr>
+                                                    <p>Metode pembayaran <strong>Tunai</strong> dengan bukti pembayaran sebagai berikut:</p>
+                                                    <img src="../assets/images/pembayaran/<?= $row_status['bukti_bayar'] ?>" style="width: 100%;height: 100%;" class="mt-3" alt="">
+                                                  <?php } else if ($row_status['status_bayar'] == 1) { ?>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                                                      <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+                                                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                                                      </symbol>
+                                                    </svg>
+                                                    <div class="alert alert-success d-flex align-items-center" role="alert">
+                                                      <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">
+                                                        <use xlink:href="#check-circle-fill" />
+                                                      </svg>
+                                                      <div>
+                                                        Pembayaran anda telah <strong>Lunas</strong>.
+                                                      </div>
+                                                    </div>
+                                                    <p>Metode pembayaran <strong>Tunai</strong> dengan bukti pembayaran sebagai berikut:</p>
+                                                    <img src="../assets/images/pembayaran/<?= $row_status['bukti_bayar'] ?>" style="width: 100%;height: 100%;" class="mt-3" alt="">
                                               <?php }
+                                                }
                                               } ?>
                                             </div>
                                           </div>

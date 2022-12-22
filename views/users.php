@@ -46,6 +46,7 @@ $_SESSION['page-url'] = "users";
                             <th>Jenis Kelamin</th>
                             <th>Telp</th>
                             <th>Alamat</th>
+                            <th>Status Akun</th>
                             <th>Tgl Dibuat</th>
                             <th>Tgl Diubah</th>
                             <th colspan="2">Aksi</th>
@@ -72,6 +73,11 @@ $_SESSION['page-url'] = "users";
                                 <td><?= $row['jenis_kelamin'] ?></td>
                                 <td><?= $row['telpon'] ?></td>
                                 <td><?= $row['alamat'] ?></td>
+                                <td><?php if ($row['id_status'] == 1) {
+                                      echo "Aktif";
+                                    } else if ($row['id_status'] == 2) {
+                                      echo "Tidak Aktif";
+                                    } ?></td>
                                 <td>
                                   <div class="badge badge-opacity-success">
                                     <?php $dateCreate = date_create($row['created_at']);
@@ -98,12 +104,11 @@ $_SESSION['page-url'] = "users";
                                         <form action="" method="POST" enctype="multipart/form-data">
                                           <div class="modal-body">
                                             <div class="mb-3">
-                                              <label for="role" class="form-label">Role</label>
-                                              <select name="role" class="form-select" aria-label="Default select example" required>
-                                                <option selected value="">Pilih Role</option>
-                                                <?php foreach ($users_role as $row_role) : ?>
-                                                  <option value="<?= $row_role['id_role'] ?>"><?= $row_role['roles'] ?></option>
-                                                <?php endforeach; ?>
+                                              <label for="status" class="form-label">Status Akun</label>
+                                              <select name="status" class="form-select" aria-label="Default select example" required>
+                                                <option selected value="">Pilih Status</option>
+                                                <option value="1">Aktif</option>
+                                                <option value="2">Tidak Aktif</option>
                                               </select>
                                             </div>
                                           </div>
@@ -175,16 +180,16 @@ $_SESSION['page-url'] = "users";
                                   if ($total_page_role1 >= 4) : ?>
                                     <li class="page-item">
                                       <a href="<?= $_SESSION['page-url'] ?>?page=<?php if ($page_role1 > 4) {
-                                                                                  echo $page_role1;
-                                                                                } else if ($page_role1 <= 4) {
-                                                                                  echo '5';
-                                                                                } ?>/" class="btn btn-<?php if ($page_role1 <= 4) {
-                                                                                                                                                                                  echo 'outline-';
-                                                                                                                                                                                } ?>primary btn-sm rounded-0"><?php if ($page_role1 > 4) {
-                                                                                                                                                                                                                                              echo $page_role1;
-                                                                                                                                                                                                                                            } else if ($page_role1 <= 4) {
-                                                                                                                                                                                                                                              echo '5';
-                                                                                                                                                                                                                                            } ?></a>
+                                                                                    echo $page_role1;
+                                                                                  } else if ($page_role1 <= 4) {
+                                                                                    echo '5';
+                                                                                  } ?>/" class="btn btn-<?php if ($page_role1 <= 4) {
+                                                                                                          echo 'outline-';
+                                                                                                        } ?>primary btn-sm rounded-0"><?php if ($page_role1 > 4) {
+                                                                                                                                      echo $page_role1;
+                                                                                                                                    } else if ($page_role1 <= 4) {
+                                                                                                                                      echo '5';
+                                                                                                                                    } ?></a>
                                     </li>
                                   <?php endif;
                                   if ($page_role1 < $total_page_role1 && $total_page_role1 >= 4) : ?>

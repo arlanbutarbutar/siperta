@@ -16,7 +16,13 @@ function daftar($data)
   $telpon = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['telpon']))));
   $alamat = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['alamat']))));
   $password = password_hash($password, PASSWORD_DEFAULT);
-  mysqli_query($conn, "INSERT INTO users(username,email,password,jenis_kelamin,telpon,alamat) VALUES('$username','$email','$password','$jenis_kelamin','$telpon','$alamat')");
+  $id_role = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-role']))));
+  if ($id_role == 3) {
+    $id_status = 1;
+  } else {
+    $id_status = 2;
+  }
+  mysqli_query($conn, "INSERT INTO users(id_role,id_status,username,email,password,jenis_kelamin,telpon,alamat) VALUES('$id_role','$id_status','$username','$email','$password','$jenis_kelamin','$telpon','$alamat')");
   return mysqli_affected_rows($conn);
 }
 function masuk($data)
@@ -33,29 +39,35 @@ function masuk($data)
     return false;
   } else if (mysqli_num_rows($checkAccount) > 0) {
     $row = mysqli_fetch_assoc($checkAccount);
-    if (password_verify($password, $row['password'])) {
-      $_SESSION['data-user'] = [
-        'id' => $row['id_user'],
-        'role' => $row['id_role'],
-        'username' => $row['username'],
-        'email' => $row['email'],
-      ];
-      if ($row['id_role'] != 3) {
-        header("Location: ../views/");
-        exit();
-      } else if ($row['id_role'] == 3) {
-        if (isset($_SESSION['id-buy'])) {
-          header("Location: ../views/pembayaran?id-buy=" . $_SESSION['id-buy']);
-          exit();
-        } else if (!isset($_SESSION['id-buy'])) {
-          header("Location: ../views/");
-          exit();
-        }
-      }
-    } else {
-      $_SESSION['message-danger'] = "Maaf, kata sandi yang anda masukan salah.";
+    if ($row['id_status'] == 2) {
+      $_SESSION['message-danger'] = "Maaf, akun anda belum di aktivasi oleh admin.";
       $_SESSION['time-message'] = time();
       return false;
+    } else if ($row['id_status'] == 1) {
+      if (password_verify($password, $row['password'])) {
+        $_SESSION['data-user'] = [
+          'id' => $row['id_user'],
+          'role' => $row['id_role'],
+          'username' => $row['username'],
+          'email' => $row['email'],
+        ];
+        if ($row['id_role'] != 3) {
+          header("Location: ../views/");
+          exit();
+        } else if ($row['id_role'] == 3) {
+          if (isset($_SESSION['id-buy'])) {
+            header("Location: ../views/pembayaran?id-buy=" . $_SESSION['id-buy']);
+            exit();
+          } else if (!isset($_SESSION['id-buy'])) {
+            header("Location: ../views/");
+            exit();
+          }
+        }
+      } else {
+        $_SESSION['message-danger'] = "Maaf, kata sandi yang anda masukan salah.";
+        $_SESSION['time-message'] = time();
+        return false;
+      }
     }
   }
 }
@@ -66,9 +78,9 @@ if (isset($_SESSION['data-user'])) {
     {
       global $conn, $time;
       $id_user = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-user']))));
-      $role = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['role']))));
+      $status = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['status']))));
       $updated_at = date("Y-m-d " . $time);
-      mysqli_query($conn, "UPDATE users SET id_role='$role', updated_at='$updated_at' WHERE id_user='$id_user'");
+      mysqli_query($conn, "UPDATE users SET id_status='$status', updated_at='$updated_at' WHERE id_user='$id_user'");
       return mysqli_affected_rows($conn);
     }
     function hapus_user($data)
@@ -87,11 +99,11 @@ if (isset($_SESSION['data-user'])) {
         $_SESSION['message-danger'] = "Maaf, nama petani yang anda masukan sudah ada.";
         $_SESSION['time-message'] = time();
         return false;
-      }else{
-        $takeUser=mysqli_query($conn, "SELECT * FROM users WHERE id_user='$id_user'");
-        $row=mysqli_fetch_assoc($takeUser);
-        $nama=$row['username'];
-        $lokasi=$row['alamat'];
+      } else {
+        $takeUser = mysqli_query($conn, "SELECT * FROM users WHERE id_user='$id_user'");
+        $row = mysqli_fetch_assoc($takeUser);
+        $nama = $row['username'];
+        $lokasi = $row['alamat'];
         mysqli_query($conn, "INSERT INTO petani(id_user,nama_petani,lokasi) VALUES('$id_user','$nama','$lokasi')");
       }
       return mysqli_affected_rows($conn);
@@ -246,6 +258,20 @@ if (isset($_SESSION['data-user'])) {
       mysqli_query($conn, "INSERT INTO pembayaran(id_penjualan,metode_bayar,total,bukti_bayar) VALUES('$id_penjualan','$metode_bayar','$total','$image')");
       return mysqli_affected_rows($conn);
     }
+    function confirm_invalid($data)
+    {
+      global $conn;
+      $id_bayar = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-bayar']))));
+      mysqli_query($conn, "UPDATE pembayaran SET status_bayar='2' WHERE id_bayar='$id_bayar'");
+      return mysqli_affected_rows($conn);
+    }
+    function confirm_valid($data)
+    {
+      global $conn;
+      $id_bayar = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-bayar']))));
+      mysqli_query($conn, "UPDATE pembayaran SET status_bayar='1' WHERE id_bayar='$id_bayar'");
+      return mysqli_affected_rows($conn);
+    }
     if ($_SESSION['data-user']['role'] == 3) {
       function buy_product($data)
       {
@@ -272,6 +298,24 @@ if (isset($_SESSION['data-user'])) {
         $total = $jumlah_beli * $harga;
         mysqli_query($conn, "INSERT INTO penjualan(id_penjualan,id_pembeli,keterangan,jumlah_beli,total) VALUES('$id_penjualan','$idUser','$ket','$jumlah_beli','$total')");
         mysqli_query($conn, "INSERT INTO penjualan_detail(id_produk,id_penjualan,kode_pembelian) VALUES('$id_produk','$id_penjualan','$kode_pembelian')");
+        return mysqli_affected_rows($conn);
+      }
+      function confirm_try($data)
+      {
+        global $conn;
+        $id_bayar = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['id-bayar']))));
+        $imageOld = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $data['imageOld']))));
+        if (!empty($_FILES['image']['name'])) {
+          $image = imageBayar();
+          if (!$image) {
+            return false;
+          } else {
+            unlink('../assets/images/pembayaran/' . $imageOld);
+          }
+        } else {
+          $image = $imageOld;
+        }
+        mysqli_query($conn, "UPDATE pembayaran SET bukti_bayar='$image', status_bayar='3' WHERE id_bayar='$id_bayar'");
         return mysqli_affected_rows($conn);
       }
     }

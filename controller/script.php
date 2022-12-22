@@ -26,9 +26,10 @@ if (isset($_SESSION['time-message'])) {
   }
 }
 
-$baseURL = "http://127.0.0.1:1010/apps/siperta/";
+$baseURL = "http://$_SERVER[HTTP_HOST]/apps/siperta/";
 
 // if (!isset($_SESSION['data-user'])) {
+$select_role = mysqli_query($conn, "SELECT * FROM users_role WHERE id_role>1");
 if (isset($_POST['daftar'])) {
   if (daftar($_POST) > 0) {
     $_SESSION['message-success'] = "Akun kamu berhasil didaftarkan, silakan masuk untuk mulai berbelanja.";
@@ -51,6 +52,7 @@ if (isset($_POST['buy-product-visitor'])) {
 // }
 if (isset($_SESSION['data-user'])) {
   $idUser = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $_SESSION['data-user']['id']))));
+  $userName=htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $_SESSION['data-user']['username']))));
   $users_role = mysqli_query($conn, "SELECT * FROM users_role");
 
   if ($_SESSION['data-user']['role'] == 1) {
@@ -162,6 +164,22 @@ if (isset($_SESSION['data-user'])) {
         exit();
       }
     }
+    if (isset($_POST['confirm-invalid'])) {
+      if (confirm_invalid($_POST) > 0) {
+        $_SESSION['message-success'] = "Berhasil memvalidasi pembayaran.";
+        $_SESSION['time-message'] = time();
+        header("Location: penjualan");
+        exit();
+      }
+    }
+    if (isset($_POST['confirm-valid'])) {
+      if (confirm_valid($_POST) > 0) {
+        $_SESSION['message-success'] = "Berhasil memvalidasi pembayaran.";
+        $_SESSION['time-message'] = time();
+        header("Location: penjualan");
+        exit();
+      }
+    }
 
     if ($_SESSION['data-user']['role'] == 2) {
       $petani = mysqli_query($conn, "SELECT * FROM petani");
@@ -232,6 +250,14 @@ if (isset($_SESSION['data-user'])) {
           exit();
         }
       }
+      if (isset($_POST['confirm-try'])) {
+        if (confirm_try($_POST) > 0) {
+          $_SESSION['message-success'] = "Berhasil mengkonfirmasi ulang pembayaran.";
+          $_SESSION['time-message'] = time();
+          header("Location: " . $_SESSION['page-url']);
+          exit();
+        }
+      }
       if (isset($_GET['id-buy'])) {
         $id_buy = htmlspecialchars(addslashes(trim(mysqli_real_escape_string($conn, $_GET['id-buy']))));
         $proses_pembayaran = mysqli_query($conn, "SELECT * FROM produk
@@ -291,7 +317,7 @@ if (isset($_SESSION['data-user'])) {
         exit();
       }
     }
-    
+
     $produkOverview = mysqli_query($conn, "SELECT * FROM produk JOIN petani ON produk.id_petani=petani.id_petani JOIN satuan ON produk.id_satuan=satuan.id_satuan ORDER BY produk.id_produk DESC LIMIT 15");
 
     if ($_SESSION['data-user']['role'] == 4) {

@@ -59,7 +59,30 @@ $_SESSION['page-url'] = "profile";
                         </div>
                         <div class="mb-3">
                           <label for="telpon" class="form-label">Telpon</label>
-                          <input type="number" name="telpon" value="<?= $row['telpon'] ?>" class="form-control" id="telpon" placeholder="Telpon" required>
+                          <div class="row">
+                            <div class="col-lg-2 p-0 m-auto">
+                              <p>+62</p>
+                            </div>
+                            <div class="col-lg-10">
+                              <input type="number" name="telpon" value="<?= $row['telpon'] ?>" class="form-control" id="telpon" placeholder="Telpon" required>
+                              <script>
+                                // Menetapkan elemen input sebagai variabel
+                                var inputTelpon = document.getElementById("telpon");
+
+                                // Menambahkan event listener kepada elemen input
+                                inputTelpon.addEventListener("input", function() {
+                                  // Mengambil nilai dari elemen input
+                                  var nilaiInput = inputTelpon.value;
+
+                                  // Menghilangkan nol di depan jika ada
+                                  nilaiInput = nilaiInput.replace(/^0+/, "");
+
+                                  // Menetapkan nilai yang sudah dihilangkan nol di depannya kembali ke elemen input
+                                  inputTelpon.value = nilaiInput;
+                                });
+                              </script>
+                            </div>
+                          </div>
                         </div>
                         <div class="mb-3">
                           <label for="alamat" class="form-label">Alamat</label>

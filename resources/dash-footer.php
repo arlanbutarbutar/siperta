@@ -8,7 +8,7 @@
 </div>
 </div>
 <script src="../assets/js/vendor.bundle.base.js"></script>
-<script src="../assets/js/Chart.min.js"></script>
+<!-- <script src="../assets/js/Chart.min.js"></script> -->
 <script src="../assets/js/bootstrap-datepicker.min.js"></script>
 <script src="../assets/js/progressbar.min.js"></script>
 <script src="../assets/js/off-canvas.js"></script>
@@ -18,8 +18,9 @@
 <script src="../assets/js/todolist.js"></script>
 <script src="../assets/js/jquery.cookie.js"></script>
 <script src="../assets/js/dashboard.js"></script>
-<script src="../assets/js/Chart.roundedBarCharts.js"></script>
+<!-- <script src="../assets/js/Chart.roundedBarCharts.js"></script> -->
 <script src="../assets/js/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
   const messageSuccess = $('.message-success').data('message-success');
   const messageInfo = $('.message-info').data('message-info');

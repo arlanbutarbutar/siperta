@@ -82,7 +82,7 @@ if ($_SESSION['data-user']['role'] == 3) {
                                   if (mysqli_num_rows($pay) == 0) { ?>
                                     <a href="#" class="btn btn-link text-decoration-none">Konfirmasi Bayar</a>
                                   <?php } else { ?>
-                                    <a href="#" class="btn btn-link text-decoration-none" data-bs-toggle="modal" data-bs-target="#status-bayar<?= $row['id_detail'] ?>"><i class="mdi mdi-check-circle text-success"></i> Pembayaran Berhasil</a>
+                                    <a href="#" class="btn btn-success border-0 text-decoration-none text-white" data-bs-toggle="modal" data-bs-target="#status-bayar<?= $row['id_detail'] ?>">Lihat Status</a>
                                     <div class="modal fade" id="status-bayar<?= $row['id_detail'] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                       <div class="modal-dialog">
                                         <div class="modal-content">
@@ -91,23 +91,62 @@ if ($_SESSION['data-user']['role'] == 3) {
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                           </div>
                                           <div class="modal-body">
-                                            <?php while ($row_status = mysqli_fetch_assoc($pay)) { ?>
-                                              <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-                                                <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
-                                                  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                                </symbol>
-                                              </svg>
-                                              <div class="alert alert-success d-flex align-items-center" role="alert">
-                                                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">
-                                                  <use xlink:href="#check-circle-fill" />
+                                            <?php while ($row_status = mysqli_fetch_assoc($pay)) {
+                                              if ($row_status['status_bayar'] == 3) { ?>
+                                                <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                                                  <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+                                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                                                  </symbol>
                                                 </svg>
-                                                <div>
-                                                  Pembayaran telah <strong>Lunas</strong>.
+                                                <div class="alert alert-warning d-flex align-items-center" role="alert">
+                                                  <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">
+                                                    <use xlink:href="#check-circle-fill" />
+                                                  </svg>
+                                                  <div>
+                                                    Cek pembayaran ini untuk <strong>memvalidasi</strong>.
+                                                  </div>
                                                 </div>
-                                              </div>
-                                              <p>Metode pembayaran <strong>Tunai</strong> dengan bukti pembayaran sebagai berikut:</p>
-                                              <img src="../assets/images/pembayaran/<?= $row_status['bukti_bayar'] ?>" style="width: 100%;height: 100%;" class="mt-3" alt="">
-                                            <?php } ?>
+                                                <p>Metode pembayaran <strong>Tunai</strong> dengan bukti pembayaran sebagai berikut:</p>
+                                                <img src="../assets/images/pembayaran/<?= $row_status['bukti_bayar'] ?>" style="width: 100%;height: 100%;" class="mt-3" alt="">
+                                                <form action="" method="post" class="mt-3">
+                                                  <input type="hidden" name="id-bayar" value="<?= $row_status['id_bayar'] ?>">
+                                                  <button type="submit" name="confirm-invalid" class="btn btn-warning">Tolak</button>
+                                                  <button type="submit" name="confirm-valid" class="btn btn-success text-white">Terima</button>
+                                                </form>
+                                              <?php } else if ($row_status['status_bayar'] == 2) { ?>
+                                                <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                                                  <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+                                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                                                  </symbol>
+                                                </svg>
+                                                <div class="alert alert-danger d-flex align-items-center" role="alert">
+                                                  <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">
+                                                    <use xlink:href="#check-circle-fill" />
+                                                  </svg>
+                                                  <div>
+                                                    Pembayaran ini sedang <strong>diproses</strong> oleh pembeli.
+                                                  </div>
+                                                </div>
+                                                <p>Metode pembayaran <strong>Tunai</strong> dengan bukti pembayaran sebagai berikut:</p>
+                                                <img src="../assets/images/pembayaran/<?= $row_status['bukti_bayar'] ?>" style="width: 100%;height: 100%;" class="mt-3" alt="">
+                                              <?php } else if ($row_status['status_bayar'] == 1) { ?>
+                                                <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                                                  <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+                                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                                                  </symbol>
+                                                </svg>
+                                                <div class="alert alert-success d-flex align-items-center" role="alert">
+                                                  <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">
+                                                    <use xlink:href="#check-circle-fill" />
+                                                  </svg>
+                                                  <div>
+                                                    Pembayaran telah <strong>Lunas</strong>.
+                                                  </div>
+                                                </div>
+                                                <p>Metode pembayaran <strong>Tunai</strong> dengan bukti pembayaran sebagai berikut:</p>
+                                                <img src="../assets/images/pembayaran/<?= $row_status['bukti_bayar'] ?>" style="width: 100%;height: 100%;" class="mt-3" alt="">
+                                            <?php }
+                                            } ?>
                                           </div>
                                         </div>
                                       </div>

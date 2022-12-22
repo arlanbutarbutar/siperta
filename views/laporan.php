@@ -168,14 +168,15 @@ if ($_SESSION['data-user']['role'] == 3) {
                 }
                 ?>
                 <script type="text/javascript">
-                  var ctx = document.getElementById("myChart").getContext('2d');
-                  var myChart = new Chart(ctx, {
+                  const ctx = document.getElementById('myChart');
+
+                  new Chart(ctx, {
                     type: 'bar',
                     data: {
                       labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
                       datasets: [{
                         label: 'Penjualan',
-                        data: [<?= $januari ?>, <?= $februari ?>, '<?= $maret ?>', '<?= $april ?>', '<?= $mei ?>', '<?= $juni ?>', '<?= $juli ?>', '<?= $agustus ?>', '<?= $september ?>', '<?= $oktober ?>', '<?= $november ?>', '<?= $desember ?>'],
+                        data: ['<?= $januari ?>', '<?= $februari ?>', '<?= $maret ?>', '<?= $april ?>', '<?= $mei ?>', '<?= $juni ?>', '<?= $juli ?>', '<?= $agustus ?>', '<?= $september ?>', '<?= $oktober ?>', '<?= $november ?>', '<?= $desember ?>'],
                         backgroundColor: 'rgba(2, 92, 225)',
                         borderColor: 'rgba(2, 92, 225)',
                         borderWidth: 1
@@ -183,11 +184,9 @@ if ($_SESSION['data-user']['role'] == 3) {
                     },
                     options: {
                       scales: {
-                        yAxes: [{
-                          ticks: {
-                            beginAtZero: true
-                          }
-                        }]
+                        y: {
+                          beginAtZero: true
+                        }
                       }
                     }
                   });
